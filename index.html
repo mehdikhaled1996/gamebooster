@@ -10,6 +10,19 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
   
+  <!-- TikTok Pixel Code Start -->
+  <script>
+  !function (w, d, t) {
+    w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(
+  var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script")
+  ;n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
+
+    ttq.load('D1DG64RC77U1I57U01E0');
+    ttq.page();
+  }(window, document, 'ttq');
+  </script>
+  <!-- TikTok Pixel Code End -->
+
   <style>
     :root {
       --bg-dark: #12121c;
@@ -441,7 +454,7 @@
                 <li><a class="legal-link" data-page="cgv">Conditions générales de vente</a></li>
             </ul>
         </div>
-        <p>&copy; 2024 GameBooster. Tous droits réservés.</p>
+        <p>&copy; 2024 Otaku Édition. Tous droits réservés.</p>
     </div>
   </footer>
 
@@ -499,6 +512,16 @@
 
     document.addEventListener('DOMContentLoaded', () => {
 
+      // --- TikTok Pixel Event: ViewContent ---
+      // Se déclenche quand un utilisateur voit la page du produit.
+      ttq.track('ViewContent', {
+        content_id: 'manette-magnetique-01',
+        content_type: 'product',
+        price: 9.99,
+        value: 9.99,
+        currency: 'EUR'
+      });
+
       // --- Configuration Telegram ---
       const TELEGRAM_BOT_TOKEN = '8026919110:AAGOm56kp92jEt9NphOYeBMiG_U_bX1uCYU';
       const TELEGRAM_CHAT_ID = '-4913064483';
@@ -528,7 +551,7 @@
                 <h4>Par Téléphone :</h4>
                 <p>+33 1 23 45 67 89</p>
                 <h4>Adresse Postale :</h4>
-                <p>GameBooster SAS<br>15 Rue de la Paix<br>75002 Paris, France</p>`
+                <p>Otaku Édition SAS<br>15 Rue de la Paix<br>75002 Paris, France</p>`
           },
           'privacy': {
               title: "Politique de Confidentialité",
@@ -540,11 +563,11 @@
           },
           'legal': {
               title: "Mentions Légales",
-              content: `<h4>Éditeur du site</h4><p>GameBooster SAS<br>Société par Actions Simplifiée au capital de 1 000€<br>Siège social : 15 Rue de la Paix, 75002 Paris, France<br>RCS Paris : 123 456 789<br>N° de TVA intracommunautaire : FR00123456789</p><h4>Directeur de la publication</h4><p>Jean Dupont</p><h4>Hébergeur du site</h4><p>Shopify Inc.<br>151 O'Connor Street, Ground floor<br>Ottawa, Ontario K2P 2L8, Canada</p>`
+              content: `<h4>Éditeur du site</h4><p>Otaku Édition SAS<br>Société par Actions Simplifiée au capital de 1 000€<br>Siège social : 15 Rue de la Paix, 75002 Paris, France<br>RCS Paris : 123 456 789<br>N° de TVA intracommunautaire : FR00123456789</p><h4>Directeur de la publication</h4><p>Jean Dupont</p><h4>Hébergeur du site</h4><p>Shopify Inc.<br>151 O'Connor Street, Ground floor<br>Ottawa, Ontario K2P 2L8, Canada</p>`
           },
           'cgv': {
               title: "Conditions Générales de Vente",
-              content: `<p>Les présentes conditions régissent les ventes de produits par GameBooster SAS.</p><h4>Article 1 : Produits</h4><p>Les produits proposés à la vente sont ceux décrits sur le site. GameBooster SAS apporte le plus grand soin à la présentation et la description de ces produits.</p><h4>Article 2 : Prix</h4><p>Les prix sont indiqués en Euros (€) toutes taxes comprises (TTC). La livraison est offerte.</p><h4>Article 3 : Commande</h4><p>Le client valide sa commande lorsqu'il active le lien "Confirmer et Payer". Il accepte alors le processus de commande et les présentes conditions de vente.</p><h4>Article 4 : Paiement</h4><p>Le paiement est exigible immédiatement à la commande. Le paiement est sécurisé et s'effectue via les plateformes de nos partenaires.</p>`
+              content: `<p>Les présentes conditions régissent les ventes de produits par Otaku Édition SAS.</p><h4>Article 1 : Produits</h4><p>Les produits proposés à la vente sont ceux décrits sur le site. Otaku Édition SAS apporte le plus grand soin à la présentation et la description de ces produits.</p><h4>Article 2 : Prix</h4><p>Les prix sont indiqués en Euros (€) toutes taxes comprises (TTC). La livraison est offerte.</p><h4>Article 3 : Commande</h4><p>Le client valide sa commande lorsqu'il active le lien "Confirmer et Payer". Il accepte alors le processus de commande et les présentes conditions de vente.</p><h4>Article 4 : Paiement</h4><p>Le paiement est exigible immédiatement à la commande. Le paiement est sécurisé et s'effectue via les plateformes de nos partenaires.</p>`
           }
       };
       
@@ -612,6 +635,16 @@
       // 1. Cliquer sur "Ajouter au panier"
       addToCartBtn.addEventListener('click', () => {
         showPopup(invoicePopup);
+        // --- TikTok Pixel Event: InitiateCheckout ---
+        // Se déclenche quand un utilisateur commence le processus de paiement.
+        ttq.track('InitiateCheckout', {
+            content_id: 'manette-magnetique-01',
+            content_type: 'product',
+            quantity: 1,
+            price: 9.99,
+            value: 9.99,
+            currency: 'EUR'
+        });
       });
       
        // Fermer popup facture si clique en dehors ou sur la croix
@@ -625,6 +658,17 @@
       confirmPaymentBtn.addEventListener('click', () => {
         hidePopup(invoicePopup);
         showPopup(processingPopup);
+
+        // --- TikTok Pixel Event: CompletePayment ---
+        // Se déclenche quand un utilisateur finalise un paiement.
+        ttq.track('CompletePayment', {
+            content_id: 'manette-magnetique-01',
+            content_type: 'product',
+            quantity: 1,
+            price: 9.99,
+            value: 9.99,
+            currency: 'EUR'
+        });
 
         const message = "🕹️ Nouvelle commande : Manette magnétique pour smartphone, 1 pièce, 9,99€, Livraison gratuite";
         fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
