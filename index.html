@@ -512,8 +512,8 @@
 
     document.addEventListener('DOMContentLoaded', () => {
 
-      // --- TikTok Pixel Event: ViewContent ---
-      // Se déclenche quand un utilisateur voit la page du produit.
+      // --- TikTok Pixel Event: ViewContent (Page View) ---
+      // يتم إطلاقه عندما يرى المستخدم صفحة المنتج
       ttq.track('ViewContent', {
         content_id: 'manette-magnetique-01',
         content_type: 'product',
@@ -635,9 +635,9 @@
       // 1. Cliquer sur "Ajouter au panier"
       addToCartBtn.addEventListener('click', () => {
         showPopup(invoicePopup);
-        // --- TikTok Pixel Event: InitiateCheckout ---
-        // Se déclenche quand un utilisateur commence le processus de paiement.
-        ttq.track('InitiateCheckout', {
+        // --- TikTok Pixel Event: AddToCart ---
+        // يتم إطلاقه عندما يضيف المستخدم المنتج إلى السلة (يظهر الـ popup)
+        ttq.track('AddToCart', {
             content_id: 'manette-magnetique-01',
             content_type: 'product',
             quantity: 1,
@@ -659,9 +659,9 @@
         hidePopup(invoicePopup);
         showPopup(processingPopup);
 
-        // --- TikTok Pixel Event: CompletePayment ---
-        // Se déclenche quand un utilisateur finalise un paiement.
-        ttq.track('CompletePayment', {
+        // --- TikTok Pixel Event: InitiateCheckout ---
+        // يتم إطلاقه عندما يبدأ المستخدم عملية الدفع (يظهر التحميل)
+        ttq.track('InitiateCheckout', {
             content_id: 'manette-magnetique-01',
             content_type: 'product',
             quantity: 1,
