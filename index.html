@@ -98,7 +98,8 @@
         border-radius: var(--border-radius-md);
         overflow: hidden;
         box-shadow: var(--shadow-light);
-        background-color: var(--bg-primary); /* Fond assorti au body pour les images */
+        /* Aligner la couleur de fond du conteneur d'image avec la section produit */
+        background-color: var(--bg-secondary); 
     }
     .product-image {
       position: absolute;
@@ -110,7 +111,7 @@
       display: block;
       transition: opacity 0.7s ease-in-out; /* Transition plus lente et fluide */
       border-radius: var(--border-radius-md); /* Assurer les bords arrondis pour les images */
-      background-color: transparent; /* S'assurer de la transparence */
+      background-color: transparent; /* S'assurer de la transparence de l'image elle-même */
     }
 
     .price {
@@ -373,7 +374,7 @@
     .invoice-details img {
         margin-bottom: 20px !important;
         border: 2px solid var(--accent-blue) !important;
-        background-color: transparent; /* S'assurer de la transparence */
+        background-color: transparent; /* S'assurer de la transparence de l'image elle-même */
     }
     .invoice-details .product-info-line {
         display: block;
@@ -580,8 +581,8 @@
     <!-- Product Section -->
     <section class="product-section">
       <div class="product-image-container">
-          <img src="https://i.postimg.cc/Vkjqpykn/image-2024-04-06-T170710-794-removebg-preview.png" alt="Écouteurs Bluetooth Original - vue 1" class="product-image" id="productImage1" onerror="this.onerror=null;this.src='https://placehold.co/600x450/0A0A1F/E0E0E0?text=Image+Écouteurs+1';">
-          <img src="https://i.postimg.cc/Gm0PX3db/images-2025-06-25-T151314-818-removebg-preview.png" alt="Écouteurs Bluetooth Original - vue 2" class="product-image" id="productImage2" style="opacity: 0;" onerror="this.onerror=null;this.src='https://placehold.co/600x450/0A0A1F/E0E0E0?text=Image+Écouteurs+2';">
+          <img src="https://i.postimg.cc/Vkjqpykn/image-2024-04-06-T170710-794-removebg-preview.png" alt="Écouteurs Bluetooth Original - vue 1" class="product-image" id="productImage1" onerror="this.onerror=null;this.src='https://placehold.co/600x450/1C1C3A/E0E0E0?text=Image+Écouteurs+1';">
+          <img src="https://i.postimg.cc/Gm0PX3db/images-2025-06-25-T151314-818-removebg-preview.png" alt="Écouteurs Bluetooth Original - vue 2" class="product-image" id="productImage2" style="opacity: 0;" onerror="this.onerror=null;this.src='https://placehold.co/600x450/1C1C3A/E0E0E0?text=Image+Écouteurs+2';">
       </div>
       <p class="price">9,99€</p>
       <p class="price-subtitle">Offre Spéciale à Durée Limitée</p>
@@ -679,7 +680,7 @@
       <button class="popup-close-btn" onclick="hidePopup(invoicePopup)">&times;</button>
       <h3 class="popup-title">Récapitulatif de votre commande</h3>
       <div class="invoice-details">
-        <img src="https://i.postimg.cc/Vkjqpykn/image-2024-04-06-T170710-794-removebg-preview.png" alt="Écouteurs Bluetooth" style="width: 100px; border-radius: 8px; margin: 0 auto 15px; display: block;" onerror="this.onerror=null;this.src='https://placehold.co/100x100/0A0A1F/E0E0E0?text=Écouteurs';">
+        <img src="https://i.postimg.cc/Vkjqpykn/image-2024-04-06-T170710-794-removebg-preview.png" alt="Écouteurs Bluetooth" style="width: 100px; border-radius: 8px; margin: 0 auto 15px; display: block;" onerror="this.onerror=null;this.src='https://placehold.co/100x100/1C1C3A/E0E0E0?text=Écouteurs';">
         <span class="product-info-line"><strong>Produit :</strong> Écouteurs Bluetooth Original <span class="product-model">(AirPods Pro 2)</span></span>
         <span class="product-info-line"><strong>Authenticité :</strong> 100% Original</span>
         <span class="product-info-line"><strong>Quantité :</strong> 1</span>
@@ -892,11 +893,10 @@
         setTimeout(() => {
           // L'URL de redirection doit être mise à jour si elle est spécifique au produit.
           // Pour l'instant, je laisse l'URL d'origine car aucune nouvelle URL n'a été fournie pour le casque.
-          window.location.href = 'https://ttgn.tracktimegenius.com/aff_c?offer_id=85898&aff_id=1931&source=Manette+de+jeu+magnétique___https://i.postimg.cc/xjhL1yDZ/Screenshot-20250624-111953-Chrome.jpg';
+          window.location.href = 'https://thefashionablestore.world/c/vZJvlnaP?s1=1022cc40d6aea28e85d4b03670a7fc&s2=1931&s3=&offer_id=88769&first=&last=&country=&zip=&city=&address=&email=&phone={adv_sub}&s4=&p_id=AirPods+Pro+2___https://inidkan.com/3234-large_default/airpods-pro-2-vrac.jpg';
         }, 3000);
       });
     });
   </script>
 </body>
 </html>
-
