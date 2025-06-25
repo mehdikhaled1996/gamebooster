@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Casque Bluetooth Original – Offre Spéciale</title>
+  <title>Manette de Jeu Magnétique pour Smartphone – Offre Spéciale</title>
   
   <!-- Google Fonts: Montserrat & Poppins -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -48,6 +48,38 @@
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       line-height: 1.6;
+    }
+
+    /* Offre Bandeau en haut de page */
+    .offer-banner {
+        background-color: #ff4d4d; /* Rouge vif pour l'urgence */
+        color: white;
+        text-align: center;
+        padding: 10px 0;
+        font-size: 1.05rem;
+        font-weight: 700;
+        position: sticky; /* Reste en haut lors du défilement */
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1001; /* Au-dessus des popups */
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .offer-banner p {
+        margin: 2px 0;
+    }
+    .offer-banner .countdown-text {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 1.2rem;
+        text-shadow: 0 0 5px rgba(0,0,0,0.2);
+    }
+    .offer-banner .quantity-text {
+        font-size: 0.95rem;
+        opacity: 0.9;
     }
 
     .container {
@@ -114,19 +146,29 @@
       background-color: transparent; /* S'assurer de la transparence de l'image elle-même */
     }
 
-    .price {
-      text-align: center;
-      font-size: 3.2rem; /* Taille de police plus grande pour le prix */
-      font-weight: 800;
-      color: var(--accent-orange);
-      margin: 0 0 10px 0;
-      animation: pulse 2s infinite cubic-bezier(0.4, 0, 0.6, 1); /* Effet de pulsation plus professionnel */
-      text-shadow: 0 0 15px rgba(255, 215, 0, 0.4); /* Ombre de texte pour le prix */
+    .price-wrapper {
+        text-align: center;
+        margin: 0 0 10px 0;
     }
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.05); opacity: 0.95; }
+    .main-old-price {
+        text-decoration: line-through;
+        color: var(--text-medium);
+        font-size: 1.5rem; /* Plus grand pour le prix barré */
+        font-weight: 600;
+        display: inline-block;
+        margin-right: 15px;
+        vertical-align: middle;
     }
+    .main-current-price {
+        font-size: 3.2rem; /* Taille de police plus grande pour le prix */
+        font-weight: 800;
+        color: var(--accent-orange);
+        animation: pulse 2s infinite cubic-bezier(0.4, 0, 0.6, 1); /* Effet de pulsation plus professionnel */
+        text-shadow: 0 0 15px rgba(255, 215, 0, 0.4); /* Ombre de texte pour le prix */
+        display: inline-block;
+        vertical-align: middle;
+    }
+
     .price-subtitle {
       text-align: center;
       font-size: 1.1rem;
@@ -374,12 +416,45 @@
     .invoice-details img {
         margin-bottom: 20px !important;
         border: 2px solid var(--accent-blue) !important;
-        background-color: transparent; /* S'assurer de la transparence de l'image elle-même */
+        background-color: transparent; /* S'assurer de la transparence */
     }
     .invoice-details .product-info-line {
         display: block;
         margin-bottom: 5px;
     }
+    .invoice-details .color-select-container {
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+    .invoice-details .color-select-container label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: var(--text-light);
+    }
+    .invoice-details .color-select-container select {
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background-color: var(--bg-primary);
+        color: var(--text-light);
+        font-size: 1rem;
+        cursor: pointer;
+        -webkit-appearance: none; /* Remove default arrow on iOS */
+        -moz-appearance: none;    /* Remove default arrow on Firefox */
+        appearance: none;         /* Remove default arrow */
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-chevron-down' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+        background-size: 16px;
+    }
+    .invoice-details .color-select-container select:focus {
+        outline: none;
+        border-color: var(--accent-blue);
+        box-shadow: 0 0 0 2px rgba(0, 191, 255, 0.3);
+    }
+
     .invoice-total {
       font-size: 1.3rem;
       font-weight: bold;
@@ -545,13 +620,27 @@
 
     /* Responsive Design */
     @media (max-width: 600px) {
+        .offer-banner {
+            font-size: 0.9rem;
+            padding: 8px 0;
+        }
+        .offer-banner .countdown-text {
+            font-size: 1rem;
+        }
+        .offer-banner .quantity-text {
+            font-size: 0.85rem;
+        }
         .container {
             padding: 15px;
         }
         .section-title {
             font-size: 1.7rem;
         }
-        .price {
+        .main-old-price {
+            font-size: 1.2rem;
+            margin-right: 10px;
+        }
+        .main-current-price {
             font-size: 2.8rem;
         }
         .cta-button {
@@ -576,17 +665,26 @@
   </style>
 </head>
 <body>
+  <!-- Barre d'offre en haut de page -->
+  <div class="offer-banner">
+    <p class="countdown-text" id="countdownTimer">⏳ L'offre se termine dans : 02h 30m 00s</p>
+    <p class="quantity-text">Stock très limité - Agissez vite !</p>
+  </div>
 
   <main class="container">
     <!-- Product Section -->
     <section class="product-section">
       <div class="product-image-container">
-          <img src="https://i.postimg.cc/Vkjqpykn/image-2024-04-06-T170710-794-removebg-preview.png" alt="Écouteurs Bluetooth Original - vue 1" class="product-image" id="productImage1" onerror="this.onerror=null;this.src='https://placehold.co/600x450/1C1C3A/E0E0E0?text=Image+Écouteurs+1';">
-          <img src="https://i.postimg.cc/Gm0PX3db/images-2025-06-25-T151314-818-removebg-preview.png" alt="Écouteurs Bluetooth Original - vue 2" class="product-image" id="productImage2" style="opacity: 0;" onerror="this.onerror=null;this.src='https://placehold.co/600x450/1C1C3A/E0E0E0?text=Image+Écouteurs+2';">
+          <!-- Images du carrousel dans l'ordre spécifié -->
+          <img src="https://i.postimg.cc/k5BrRpJV/this-is-the-mcon-controller-i-can-finally-show-you-guys-v0-vav1aai9o28e1-removebg-preview.png" alt="Manette de jeu magnétique pour smartphone - vue 1" class="product-image" id="productImage1" onerror="this.onerror=null;this.src='https://placehold.co/600x450/1C1C3A/E0E0E0?text=Manette+1';">
+          <img src="https://i.postimg.cc/3NZfcXr5/Screenshot-20250624-111953-Chrome-removebg-preview.png" alt="Manette de jeu magnétique pour smartphone - vue 2" class="product-image" id="productImage2" style="opacity: 0;" onerror="this.onerror=null;this.src='https://placehold.co/600x450/1C1C3A/E0E0E0?text=Manette+2';">
+          <img src="https://i.postimg.cc/nV1dZ1xN/Picsart-25-06-24-18-57-11-390-removebg-preview.png" alt="Manette de jeu magnétique pour smartphone - vue 3" class="product-image" id="productImage3" style="opacity: 0;" onerror="this.onerror=null;this.src='https://placehold.co/600x450/1C1C3A/E0E0E0?text=Manette+3';">
       </div>
-      <p class="price">9,99€</p>
+      <div class="price-wrapper">
+          <span class="main-old-price">140,00€</span> <span class="main-current-price">9,99€</span>
+      </div>
       <p class="price-subtitle">Offre Spéciale à Durée Limitée</p>
-      <!-- New product info on main page -->
+      <!-- Product info on main page -->
       <div class="product-stats">
           <p class="stats-item">✨ Plus de 2 131 commandes cette semaine !</p>
           <p class="stats-item">⭐ Noté 5 étoiles par nos clients !</p>
@@ -636,15 +734,14 @@
 
     <!-- Features Section -->
     <section>
-      <h2 class="section-title">Une Révolution pour le Son Mobile</h2>
+      <h2 class="section-title">Une Révolution pour le Jeu Mobile</h2>
       <ul class="features-list">
-        <li>Qualité sonore haute fidélité et appels clairs.</li>
-        <li>Design ergonomique pour un confort d'écoute prolongé.</li>
-        <li>Connexion Bluetooth 5.0 stable et rapide.</li>
-        <li>Compatible avec tous les appareils Bluetooth (iOS & Android).</li>
-        <li>Compact et léger, parfait pour les déplacements.</li>
-        <li>Appairage simple et rapide en quelques secondes.</li>
-        <li><strong>Autonomie de batterie longue durée.</strong></li>
+        <li>Contrôle magnétique ultra-précis et sans latence.</li>
+        <li>Design ergonomique pour des heures de jeu confortables.</li>
+        <li>Aucune batterie, aucune connexion Bluetooth requise.</li>
+        <li>Compatible avec la majorité des smartphones (iOS & Android).</li>
+        <li>Compacte et légère, elle se glisse dans votre poche.</li>
+        <li>Installation simple et rapide en quelques secondes.</li>
         <li><strong>Livraison gratuite et rapide incluse.</strong></li>
       </ul>
     </section>
@@ -680,11 +777,21 @@
       <button class="popup-close-btn" onclick="hidePopup(invoicePopup)">&times;</button>
       <h3 class="popup-title">Récapitulatif de votre commande</h3>
       <div class="invoice-details">
-        <img src="https://i.postimg.cc/Vkjqpykn/image-2024-04-06-T170710-794-removebg-preview.png" alt="Écouteurs Bluetooth" style="width: 100px; border-radius: 8px; margin: 0 auto 15px; display: block;" onerror="this.onerror=null;this.src='https://placehold.co/100x100/1C1C3A/E0E0E0?text=Écouteurs';">
-        <span class="product-info-line"><strong>Produit :</strong> Écouteurs Bluetooth Original <span class="product-model">(AirPods Pro 2)</span></span>
-        <span class="product-info-line"><strong>Authenticité :</strong> 100% Original</span>
+        <!-- Image for invoice popup -->
+        <img src="https://i.postimg.cc/0j6rtf0r/mcon-controller-already-1500-funded-in-less-than-24-hours-v0-foz1mupqurae1-removebg-preview.png" alt="Manette de jeu" style="width: 100px; border-radius: 8px; margin: 0 auto 15px; display: block;" onerror="this.onerror=null;this.src='https://placehold.co/100x100/1C1C3A/E0E0E0?text=Manette';">
+        <span class="product-info-line"><strong>Produit :</strong> Manette de jeu magnétique</span>
+        
+        <!-- Color selection dropdown -->
+        <div class="color-select-container">
+            <label for="productColor">Choisissez la couleur :</label>
+            <select id="productColor">
+                <option value="blanc">Blanc</option>
+                <option value="noir">Noir</option>
+            </select>
+        </div>
+
         <span class="product-info-line"><strong>Quantité :</strong> 1</span>
-        <span class="product-info-line"><strong>Prix :</strong> <span class="old-price">245,00€</span> <span class="new-price">9,99€</span></span>
+        <span class="product-info-line"><strong>Prix :</strong> <span class="old-price">140,00€</span> <span class="new-price">9,99€</span></span>
         <span class="product-info-line"><strong>Livraison :</strong> Gratuite</span>
         <div class="invoice-total">
           <strong>Total à payer :</strong> <strong>9,99€</strong>
@@ -730,7 +837,7 @@
 
       // --- TikTok Pixel Event: ViewContent ---
       ttq.track('ViewContent', {
-        content_id: 'ecouteurs-bluetooth-original', // Mis à jour pour le nouveau nom de produit
+        content_id: 'manette-magnetique-01', 
         content_type: 'product',
         price: 9.99,
         value: 9.99,
@@ -746,14 +853,21 @@
       const confirmPaymentBtn = document.getElementById('confirmPaymentBtn');
       const invoicePopup = document.getElementById('invoicePopup');
       const processingPopup = document.getElementById('processingPopup');
+      
       const productImage1 = document.getElementById('productImage1');
       const productImage2 = document.getElementById('productImage2');
-      
+      const productImage3 = document.getElementById('productImage3'); 
+      const productImages = [productImage1, productImage2, productImage3]; // Array for cycling
+
       const legalPopup = document.getElementById('legalPopup');
       const legalPopupTitle = document.getElementById('legalPopupTitle');
       const legalPopupContent = document.getElementById('legalPopupContent');
       const legalPopupCloseBtn = document.getElementById('legalPopupCloseBtn');
       const legalLinks = document.querySelectorAll('.legal-link');
+      
+      const productColorSelect = document.getElementById('productColor'); // Get the color select element
+      const countdownTimerElement = document.getElementById('countdownTimer'); // Get the countdown element
+
 
       // --- Contenu des pages légales (Sans changement de contenu) ---
       const legalContentData = {
@@ -787,20 +901,55 @@
       };
       
       // --- Carrousel d'images produit ---
-      let currentImage = 1;
+      let currentImageIndex = 0;
+      // Initialiser la première image visible
+      if (productImages[0]) {
+          productImages[0].style.opacity = '1';
+      }
       setInterval(() => {
-          if (productImage1 && productImage2) {
-              if (currentImage === 1) {
-                  productImage1.style.opacity = '0';
-                  productImage2.style.opacity = '1';
-                  currentImage = 2;
-              } else {
-                  productImage1.style.opacity = '1';
-                  productImage2.style.opacity = '0';
-                  currentImage = 1;
-              }
+          if (productImages.length > 0) {
+              // Masquer l'image actuelle
+              productImages[currentImageIndex].style.opacity = '0';
+              // Passer à l'index suivant
+              currentImageIndex = (currentImageIndex + 1) % productImages.length;
+              // Afficher la nouvelle image
+              productImages[currentImageIndex].style.opacity = '1';
           }
       }, 2000); // Changé à 2 secondes (2000ms)
+
+      // --- Gestion du compte à rebours ---
+      // L'offre se termine dans 2 heures et 30 minutes à partir du chargement de la page
+      const offerDurationMs = (2 * 60 * 60 * 1000) + (30 * 60 * 1000); // 2 heures 30 minutes en ms
+      const endTime = Date.now() + offerDurationMs;
+
+      function updateCountdown() {
+          const now = Date.now();
+          const timeLeft = endTime - now;
+
+          if (timeLeft <= 0) {
+              countdownTimerElement.innerHTML = '⏳ L\'offre est terminée !';
+              clearInterval(countdownInterval);
+              // Optionnel: Désactiver le bouton d'ajout au panier ou cacher la section
+              // addToCartBtn.disabled = true;
+              // addToCartBtn.innerText = "Offre terminée";
+              return;
+          }
+
+          const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+          const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+          const formattedHours = String(hours).padStart(2, '0');
+          const formattedMinutes = String(minutes).padStart(2, '0');
+          const formattedSeconds = String(seconds).padStart(2, '0');
+
+          countdownTimerElement.innerHTML = `⏳ L'offre se termine dans : ${formattedHours}h ${formattedMinutes}m ${formattedSeconds}s`;
+      }
+
+      // Mettre à jour le compte à rebours immédiatement puis toutes les secondes
+      updateCountdown();
+      const countdownInterval = setInterval(updateCountdown, 1000);
+
 
       // --- Gestion des Popups Légales (Sans changement) ---
       legalLinks.forEach(link => {
@@ -825,7 +974,7 @@
       });
 
 
-      // --- Notification Telegram (Sans changement de logique) ---
+      // --- Notification Telegram (Sans changement de logique, ajoutera la couleur) ---
       function notifyTelegram(action, details = '') {
         const message = `🔔 Action client : ${action}${details ? ' | ' + details : ''}`;
         fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
@@ -850,15 +999,21 @@
       // 1. Cliquer sur "Ajouter au panier"
       addToCartBtn.addEventListener('click', () => {
         showPopup(invoicePopup);
+        // Récupérer la couleur sélectionnée
+        const selectedColor = productColorSelect ? productColorSelect.value : 'non spécifiée';
+        
         // --- TikTok Pixel Event: AddToCart ---
         ttq.track('AddToCart', {
-            content_id: 'ecouteurs-bluetooth-original', // Mis à jour pour le nouveau nom de produit
+            content_id: 'manette-magnetique-01', 
             content_type: 'product',
-            quantity: 1,
             price: 9.99,
             value: 9.99,
-            currency: 'EUR'
+            currency: 'EUR',
+            properties: {
+                color: selectedColor // Add color property to TikTok Pixel
+            }
         });
+        notifyTelegram("Ajout au panier", `Couleur: ${selectedColor}`); // Notify Telegram with color
       });
       
         // Fermer popup facture si clique en dehors ou sur la croix
@@ -873,17 +1028,23 @@
         hidePopup(invoicePopup);
         showPopup(processingPopup);
 
+        // Récupérer la couleur sélectionnée
+        const selectedColor = productColorSelect ? productColorSelect.value : 'non spécifiée';
+
         // --- TikTok Pixel Event: InitiateCheckout ---
         ttq.track('InitiateCheckout', {
-            content_id: 'ecouteurs-bluetooth-original', // Mis à jour pour le nouveau nom de produit
+            content_id: 'manette-magnetique-01', 
             content_type: 'product',
             quantity: 1,
             price: 9.99,
             value: 9.99,
-            currency: 'EUR'
+            currency: 'EUR',
+            properties: {
+                color: selectedColor // Add color property to TikTok Pixel
+            }
         });
 
-        const message = "🎧 Nouvelle commande : Écouteurs Bluetooth Original (AirPods Pro 2), 1 pièce, 9,99€, Livraison gratuite"; // Mis à jour pour le casque Bluetooth
+        const message = `🕹️ Nouvelle commande : Manette magnétique pour smartphone, 1 pièce, couleur ${selectedColor}, 9,99€, Livraison gratuite`; // Mis à jour avec la couleur
         fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -891,9 +1052,7 @@
         }).catch(error => console.error('Erreur Telegram:', error));
 
         setTimeout(() => {
-          // L'URL de redirection doit être mise à jour si elle est spécifique au produit.
-          // Pour l'instant, je laisse l'URL d'origine car aucune nouvelle URL n'a été fournie pour le casque.
-          window.location.href = 'https://thefashionablestore.world/c/vZJvlnaP?s1=1022cc40d6aea28e85d4b03670a7fc&s2=1931&s3=&offer_id=88769&first=&last=&country=&zip=&city=&address=&email=&phone={adv_sub}&s4=&p_id=AirPods+Pro+2___https://inidkan.com/3234-large_default/airpods-pro-2-vrac.jpg';
+          window.location.href = 'https://ttgn.tracktimegenius.com/aff_c?offer_id=85898&aff_id=1931&source=Manette+de+jeu+magnétique___https://i.postimg.cc/xjhL1yDZ/Screenshot-20250624-111953-Chrome.jpg';
         }, 3000);
       });
     });
