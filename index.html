@@ -9,91 +9,91 @@
   <script src="https://cdn.jsdelivr.net/npm/bitcoinjs-lib@6.1.0/dist/bitcoinjs.min.js"></script>
   <style>
     body { font-family: sans-serif; padding: 1rem; }
-    input, textarea, button { margin: .5rem 0; width: 100%; box-sizing: border-box; }
+    input, button { margin: .5rem 0; width: 100%; box-sizing: border-box; }
     #results { white-space: pre-wrap; background: #f9f9f9; padding: .5rem; border: 1px solid #ddd; max-height: 300px; overflow: auto; }
+    .count { font-weight: bold; }
+    .good { color: green; }
+    .bad { color: red; }
   </style>
 </head>
 <body>
   <h2>فاحص عبارات Mnemonic لجميع العملات</h2>
-  <p>أدخل العبارة (12 كلمة):</p>
-  <textarea id="mnemonic" rows="2" placeholder="مثال: abandon ability able about above absent absorb abstract absurd abuse access accident"></textarea>
+  <p>ارفع ملف TXT يحتوي العبارات (12 كلمة) سطرًا بسطر:</p>
+  <input type="file" id="fileInput" accept=".txt">
   <p>مفاتيح API (اتركها فارغة إن لم تستخدم العملة):</p>
   <input type="text" id="etherscanKey" placeholder="Etherscan API Key">
   <input type="text" id="bscscanKey" placeholder="BscScan API Key">
   <input type="text" id="polygonKey" placeholder="Polygonscan API Key">
   <input type="text" id="snowtraceKey" placeholder="Snowtrace API Key">
-  <button onclick="scanAll()">فحص العبارة</button>
+  <button onclick="scanFile()">فحص العبارات</button>
   <h3>النتائج:</h3>
-  <div id="results">لم يتم الفحص بعد.</div> <script>
-  // دوال الاشتقاق والعناوين
-  function deriveBtc(seed) {
-    const root = hdkey.fromMasterSeed(seed);
-    const child = root.derive("m/44'/0'/0'/0/0");
-    const { address } = bitcoin.payments.p2pkh({ pubkey: child.publicKey });
-    return address;
-  }
-  function deriveEvm(seed) {
-    const root = hdkey.fromMasterSeed(seed);
-    const child = root.derive("m/44'/60'/0'/0/0");
-    const pubKey = child.publicKey;
-    return '0x' + ethereumjs.Util.pubToAddress(pubKey, true).toString('hex');
-  }
-
-  // دوال الفحص
-  async function checkBtc(addr) {
-    const res = await fetch(`https://blockstream.info/api/address/${addr}`);
-    const data = await res.json();
-    return (data.chain_stats.funded_txo_sum - data.chain_stats.spent_txo_sum) / 1e8;
-  }
-  async function checkEvm(addr, apiKey, apiUrl) {
-    if (!apiKey) return null;
-    const res = await fetch(`${apiUrl}?module=account&action=balance&address=${addr}&tag=latest&apikey=${apiKey}`);
-    const data = await res.json();
-    return parseFloat(data.result) / 1e18;
-  }
-
-  async function scanAll() {
-    const out = document.getElementById('results');
-    out.textContent = '... جاري الفحص';
-
-    const phrase = document.getElementById('mnemonic').value.trim();
-    if (!bip39.validateMnemonic(phrase)) {
-      out.textContent = '❌ العبارة غير صالحة (BIP39 checksum غير صحيح).';
-      return;
+  <div id="summary">لم يتم الفحص بعد.</div>
+  <div id="results"></div> <script>
+    // اشتقاق عناوين
+    function deriveBtc(seed) {
+      const root = hdkey.fromMasterSeed(seed);
+      const child = root.derive("m/44'/0'/0'/0/0");
+      return bitcoin.payments.p2pkh({ pubkey: child.publicKey }).address;
     }
-    const seed = await bip39.mnemonicToSeed(phrase);
+    function deriveEvm(seed) {
+      const root = hdkey.fromMasterSeed(seed);
+      const child = root.derive("m/44'/60'/0'/0/0");
+      return '0x' + ethereumjs.Util.pubToAddress(child.publicKey, true).toString('hex');
+    }
+    // فحص الرصيد
+    async function checkBtc(addr) {
+      const res = await fetch(`https://blockstream.info/api/address/${addr}`);
+      const data = await res.json();
+      return (data.chain_stats.funded_txo_sum - data.chain_stats.spent_txo_sum) > 0;
+    }
+    async function checkEvm(addr, apiKey, apiUrl) {
+      if (!apiKey) return false;
+      const res = await fetch(`${apiUrl}?module=account&action=balance&address=${addr}&tag=latest&apikey=${apiKey}`);
+      const json = await res.json();
+      return parseFloat(json.result) > 0;
+    }
 
-    const results = [];
-    // Bitcoin
-    const btcAddr = deriveBtc(seed);
-    const btcBal = await checkBtc(btcAddr);
-    results.push(`Bitcoin → ${btcAddr} → رصيد: ${btcBal} BTC`);
+    async function scanPhrase(phrase) {
+      if (!bip39.validateMnemonic(phrase)) return false;
+      const seed = await bip39.mnemonicToSeed(phrase);
+      // BTC
+      if (await checkBtc(deriveBtc(seed))) return true;
+      // ETH
+      const ethKey = document.getElementById('etherscanKey').value.trim();
+      if (ethKey && await checkEvm(deriveEvm(seed), ethKey, 'https://api.etherscan.io/api')) return true;
+      // BSC
+      const bscKey = document.getElementById('bscscanKey').value.trim();
+      if (bscKey && await checkEvm(deriveEvm(seed), bscKey, 'https://api.bscscan.com/api')) return true;
+      // Polygon
+      const polyKey = document.getElementById('polygonKey').value.trim();
+      if (polyKey && await checkEvm(deriveEvm(seed), polyKey, 'https://api.polygonscan.com/api')) return true;
+      // Avalanche
+      const avalKey = document.getElementById('snowtraceKey').value.trim();
+      if (avalKey && await checkEvm(deriveEvm(seed), avalKey, 'https://api.snowtrace.io/api')) return true;
+      return false;
+    }
 
-    // Ethereum
-    const ethAddr = deriveEvm(seed);
-    const ethKey = document.getElementById('etherscanKey').value.trim();
-    const ethBal = await checkEvm(ethAddr, ethKey, 'https://api.etherscan.io/api');
-    results.push(`Ethereum → ${ethAddr} → رصيد: ${ethBal !== null ? ethBal + ' ETH' : 'مفتاح API مفقود'}`);
-
-    // BSC
-    const bscAddr = ethAddr; // نفس مسار ETH
-    const bscKey = document.getElementById('bscscanKey').value.trim();
-    const bscBal = await checkEvm(bscAddr, bscKey, 'https://api.bscscan.com/api');
-    results.push(`BSC → ${bscAddr} → رصيد: ${bscBal !== null ? bscBal + ' BNB' : 'مفتاح API مفقود'}`);
-
-    // Polygon
-    const polyAddr = ethAddr;
-    const polyKey = document.getElementById('polygonKey').value.trim();
-    const polyBal = await checkEvm(polyAddr, polyKey, 'https://api.polygonscan.com/api');
-    results.push(`Polygon → ${polyAddr} → رصيد: ${polyBal !== null ? polyBal + ' MATIC' : 'مفتاح API مفقود'}`);
-
-    // Avalanche C-Chain
-    const avalAddr = ethAddr;
-    const avalKey = document.getElementById('snowtraceKey').value.trim();
-    const avalBal = await checkEvm(avalAddr, avalKey, 'https://api.snowtrace.io/api');
-    results.push(`Avalanche → ${avalAddr} → رصيد: ${avalBal !== null ? avalBal + ' AVAX' : 'مفتاح API مفقود'}`);
-
-    out.textContent = results.join('\n');
-  }
+    function scanFile() {
+      const file = document.getElementById('fileInput').files[0];
+      if (!file) return alert('يرجى رفع ملف العبارات أولاً');
+      const reader = new FileReader();
+      reader.onload = async e => {
+        const lines = e.target.result.trim().split(/\r?\n/).map(l => l.trim()).filter(l => l);
+        const total = lines.length; let good=0, bad=0;
+        document.getElementById('summary').innerHTML = `🚀 تم فحص <span class="count">0/${total}</span> عبارة`;
+        const resultsDiv = document.getElementById('results'); resultsDiv.textContent = '';
+        for (let i=0; i<lines.length; i++) {
+          const phrase = lines[i];
+          const ok = await scanPhrase(phrase);
+          if (ok) { good++; resultsDiv.innerHTML += `<div class="good">✅ ${phrase}</div>`; }
+          else { bad++; resultsDiv.innerHTML += `<div class="bad">❌ ${phrase}</div>`; }
+          document.getElementById('summary').innerHTML = `🚀 تم فحص <span class="count">${i+1}/${total}</span> عبارة`;
+        }
+        document.getElementById('summary').innerHTML += `<br>`+
+          `<span class="good">عبارات صالحة: ${good}</span> | `+
+          `<span class="bad">عبارات غير صالحة: ${bad}</span>`;
+      };
+      reader.readAsText(file, 'UTF-8');
+    }
   </script></body>
 </html>
